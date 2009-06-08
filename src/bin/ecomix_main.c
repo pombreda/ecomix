@@ -52,7 +52,7 @@ static void ecomix_app_finish(Ecomix_App *ecomix);
 static void destroy_main_window(Ecore_Evas *ee);
 
 static Eina_Bool ecomix_image_load(Ecomix_App *ecomix);
-static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, const char *file, const char *key, void *buf, size_t size);
+static Eina_Bool display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, const char *file, const char *key, void *buf, size_t size);
 static void image_fit(Ecomix_App *ecomix, char *data);
 static int change_archive(Ecomix_App *ecomix, int z, char *keyname);
 
@@ -405,8 +405,10 @@ static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *
    evas_event_thaw(ecomix->evas);
 }
 
-static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, const char *file, const char *key, void *buf, size_t size) {
+static Eina_Bool display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, const char *file, const char *key, void *buf, size_t size) {
    Image_Entry *ie;
+   Eina_Bool ret = 0;
+
    if(! ecomix) return;
    if(! file) return;
    if(! load) return;
@@ -416,9 +418,9 @@ static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, co
    ie = &(ecomix->ie);
 
    if(load->head(ie, file, key, buf, size))
-      load->data(ie, file, key, buf, size);
+      ret = load->data(ie, file, key, buf, size);
 
-   if(ie->surface && ie->w && ie->h) 
+   if(ret && ie->surface && ie->w && ie->h) 
    {
       evas_object_image_alpha_set(ecomix->image, ie->flags.alpha);
       evas_object_image_size_set(ecomix->image, ie->w, ie->h);
@@ -433,11 +435,13 @@ static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, co
       evas_object_image_data_update_add(ecomix->image, 0, 0, ie->w, ie->h);
       image_fit(ecomix, ecomix->fill_mode);
    }
+
+   return ret;
 }
 
 static Eina_Bool ecomix_image_load(Ecomix_App *ecomix) {
    Ecomix_File_Buffer *fbuf;
-   Eina_Bool res = 0;
+   Eina_Bool ret = 0;
    char *filename;
    int tw, th, cw, ch;
 
@@ -454,23 +458,23 @@ static Eina_Bool ecomix_image_load(Ecomix_App *ecomix) {
 	 if(load) {
 	    char buf[PATH_MAX];
 	    memset(buf, 0, PATH_MAX);
-	    display_image(ecomix, load, ecomix->info->archname, filename, fbuf->buf, fbuf->size);
+	    ret = display_image(ecomix, load, ecomix->info->archname, filename, fbuf->buf, fbuf->size);
 	    if(ecomix->verbose)
 	       printf("LOAD: %s : %s\n", ecomix->info->archname, filename);
-	    snprintf(buf, PATH_MAX -1, "%s [%d / %d]", filename, ecomix->current + 1,
-		  eina_list_count(ecomix->info->list));
-	    evas_object_text_text_set(ecomix->text, buf);
-	    evas_object_geometry_get(ecomix->container, NULL, NULL, &cw, &ch);
-	    evas_object_geometry_get(ecomix->text, NULL, NULL, &tw, &th);
-	    evas_object_move(ecomix->text, cw - (tw + 10), 10);
-	    res = 1;
-
+	    if(ret) {
+	       snprintf(buf, PATH_MAX -1, "%s [%d / %d]", filename, ecomix->current + 1,
+		     eina_list_count(ecomix->info->list));
+	       evas_object_text_text_set(ecomix->text, buf);
+	       evas_object_geometry_get(ecomix->container, NULL, NULL, &cw, &ch);
+	       evas_object_geometry_get(ecomix->text, NULL, NULL, &tw, &th);
+	       evas_object_move(ecomix->text, cw - (tw + 10), 10);
+	    }
 	 }
 	 ecomix_arch_data_del(fbuf);
       }
    }
 
-   return res;
+   return ret;
 }
 
 

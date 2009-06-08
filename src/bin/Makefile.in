@@ -32,22 +32,11 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@HAVE_PNG_TRUE@am__append_1 = @ecomix_image_loader_png_cflags@
-@HAVE_GIF_TRUE@am__append_2 = @ecomix_image_loader_gif_cflags@
-@HAVE_TIFF_TRUE@am__append_3 = @ecomix_image_loader_tiff_cflags@
-@HAVE_SVG_TRUE@am__append_4 = @ecomix_image_loader_svg_cflags@
-@HAVE_JPEG_TRUE@am__append_5 = @ecomix_image_loader_jpeg_cflags@
 bin_PROGRAMS = ecomix$(EXEEXT)
-@HAVE_PNG_TRUE@am__append_6 = @ecomix_image_loader_png_libs@
-@HAVE_GIF_TRUE@am__append_7 = @ecomix_image_loader_gif_libs@
-@HAVE_SVG_TRUE@am__append_8 = @ecomix_image_loader_svg_libs@
-@HAVE_TIFF_TRUE@am__append_9 = @ecomix_image_loader_tiff_libs@
-@HAVE_JPEG_TRUE@am__append_10 = @ecomix_image_loader_jpeg_libs@
 subdir = src/bin
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/evas_check_loader.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -58,15 +47,9 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_ecomix_OBJECTS = ecomix_arch_data_load.$(OBJEXT) \
 	ecomix_image_rotate.$(OBJEXT) ecomix_main.$(OBJEXT) \
-	evas_image_load_gif.$(OBJEXT) evas_image_load_png.$(OBJEXT) \
-	evas_image_load_jpeg.$(OBJEXT) evas_image_load_tiff.$(OBJEXT) \
-	evas_image_load_pmaps.$(OBJEXT) evas_image_load_svg.$(OBJEXT) \
-	evas_image_load_xpm.$(OBJEXT)
+	im.$(OBJEXT)
 ecomix_OBJECTS = $(am_ecomix_OBJECTS)
-am__DEPENDENCIES_1 =
-ecomix_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+ecomix_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -109,6 +92,8 @@ ECORE_LIBS = @ECORE_LIBS@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GREP = @GREP@
+GraphicsMagick_CFLAGS = @GraphicsMagick_CFLAGS@
+GraphicsMagick_LIBS = @GraphicsMagick_LIBS@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -132,15 +117,11 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
-PNG_CFLAGS = @PNG_CFLAGS@
-PNG_LIBS = @PNG_LIBS@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-SVG_CFLAGS = @SVG_CFLAGS@
-SVG_LIBS = @SVG_LIBS@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -163,20 +144,6 @@ datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
-ecomix_image_loader_gif_cflags = @ecomix_image_loader_gif_cflags@
-ecomix_image_loader_gif_libs = @ecomix_image_loader_gif_libs@
-ecomix_image_loader_jpeg_cflags = @ecomix_image_loader_jpeg_cflags@
-ecomix_image_loader_jpeg_libs = @ecomix_image_loader_jpeg_libs@
-ecomix_image_loader_pmaps_cflags = @ecomix_image_loader_pmaps_cflags@
-ecomix_image_loader_pmaps_libs = @ecomix_image_loader_pmaps_libs@
-ecomix_image_loader_png_cflags = @ecomix_image_loader_png_cflags@
-ecomix_image_loader_png_libs = @ecomix_image_loader_png_libs@
-ecomix_image_loader_svg_cflags = @ecomix_image_loader_svg_cflags@
-ecomix_image_loader_svg_libs = @ecomix_image_loader_svg_libs@
-ecomix_image_loader_tiff_cflags = @ecomix_image_loader_tiff_cflags@
-ecomix_image_loader_tiff_libs = @ecomix_image_loader_tiff_libs@
-ecomix_image_loader_xpm_cflags = @ecomix_image_loader_xpm_cflags@
-ecomix_image_loader_xpm_libs = @ecomix_image_loader_xpm_libs@
 exec_prefix = @exec_prefix@
 host = @host@
 host_alias = @host_alias@
@@ -206,23 +173,19 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I. -I$(top_srcdir)/ @ECORE_CFLAGS@ $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5)
+INCLUDES = \
+-I. \
+-I$(top_srcdir)/ \
+@ECORE_CFLAGS@ \
+@GraphicsMagick_CFLAGS@
+
 ecomix_SOURCES = \
 ecomix_arch_data_load.c \
 ecomix_image_rotate.c \
 ecomix_main.c \
-evas_image_load_gif.c \
-evas_image_load_png.c \
-evas_image_load_jpeg.c \
-evas_image_load_tiff.c \
-evas_image_load_pmaps.c \
-evas_image_load_svg.c \
-evas_image_load_xpm.c
+im.c
 
-ecomix_LDADD = @ECORE_LIBS@ @LIBS@ $(am__append_6) $(am__append_7) \
-	$(am__append_8) $(am__append_9) $(am__append_10)
+ecomix_LDADD = @ECORE_LIBS@ @GraphicsMagick_LIBS@ @LIBS@
 all: all-am
 
 .SUFFIXES:
@@ -297,13 +260,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ecomix_arch_data_load.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ecomix_image_rotate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ecomix_main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_gif.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_jpeg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_pmaps.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_png.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_svg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_tiff.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evas_image_load_xpm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/im.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

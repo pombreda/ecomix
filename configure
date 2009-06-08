@@ -858,41 +858,11 @@ RANLIB
 DSYMUTIL
 NMEDIT
 LIBTOOL
-ecomix_image_loader_gif_cflags
-ecomix_image_loader_gif_libs
-HAVE_GIF_TRUE
-HAVE_GIF_FALSE
-ecomix_image_loader_jpeg_cflags
-ecomix_image_loader_jpeg_libs
-HAVE_JPEG_TRUE
-HAVE_JPEG_FALSE
-ecomix_image_loader_pmaps_cflags
-ecomix_image_loader_pmaps_libs
-HAVE_PMAPS_TRUE
-HAVE_PMAPS_FALSE
 PKG_CONFIG
-PNG_CFLAGS
-PNG_LIBS
-ecomix_image_loader_png_cflags
-ecomix_image_loader_png_libs
-HAVE_PNG_TRUE
-HAVE_PNG_FALSE
-SVG_CFLAGS
-SVG_LIBS
-ecomix_image_loader_svg_cflags
-ecomix_image_loader_svg_libs
-HAVE_SVG_TRUE
-HAVE_SVG_FALSE
-ecomix_image_loader_tiff_cflags
-ecomix_image_loader_tiff_libs
-HAVE_TIFF_TRUE
-HAVE_TIFF_FALSE
-ecomix_image_loader_xpm_cflags
-ecomix_image_loader_xpm_libs
-HAVE_XPM_TRUE
-HAVE_XPM_FALSE
 ECORE_CFLAGS
 ECORE_LIBS
+GraphicsMagick_CFLAGS
+GraphicsMagick_LIBS
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -906,12 +876,10 @@ LIBS
 CPPFLAGS
 CPP
 PKG_CONFIG
-PNG_CFLAGS
-PNG_LIBS
-SVG_CFLAGS
-SVG_LIBS
 ECORE_CFLAGS
-ECORE_LIBS'
+ECORE_LIBS
+GraphicsMagick_CFLAGS
+GraphicsMagick_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1498,20 +1466,6 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --disable-image-loader-gif
-                          disable Gif image loader
-  --disable-image-loader-jpeg
-                          disable Jpeg image loader
-  --disable-image-loader-pmaps
-                          disable PMAPS image loader
-  --disable-image-loader-png
-                          disable PNG image loader
-  --disable-image-loader-svg
-                          disable SVG image loader
-  --disable-image-loader-tiff
-                          disable Tiff image loader
-  --disable-image-loader-xpm
-                          disable XPM image loader
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1531,13 +1485,13 @@ Some influential environment variables:
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
   PKG_CONFIG  path to pkg-config utility
-  PNG_CFLAGS  C compiler flags for PNG, overriding pkg-config
-  PNG_LIBS    linker flags for PNG, overriding pkg-config
-  SVG_CFLAGS  C compiler flags for SVG, overriding pkg-config
-  SVG_LIBS    linker flags for SVG, overriding pkg-config
   ECORE_CFLAGS
               C compiler flags for ECORE, overriding pkg-config
   ECORE_LIBS  linker flags for ECORE, overriding pkg-config
+  GraphicsMagick_CFLAGS
+              C compiler flags for GraphicsMagick, overriding pkg-config
+  GraphicsMagick_LIBS
+              linker flags for GraphicsMagick, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -5958,7 +5912,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5961 "configure"' > conftest.$ac_ext
+  echo '#line 5915 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7574,11 +7528,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7577: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7531: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7581: \$? = $ac_status" >&5
+   echo "$as_me:7535: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7864,11 +7818,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7867: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7821: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7871: \$? = $ac_status" >&5
+   echo "$as_me:7825: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7968,11 +7922,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7971: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7925: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7975: \$? = $ac_status" >&5
+   echo "$as_me:7929: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10345,7 +10299,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10348 "configure"
+#line 10302 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10445,7 +10399,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10448 "configure"
+#line 10402 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11245,11 +11199,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11248: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11202: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11252: \$? = $ac_status" >&5
+   echo "$as_me:11206: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11535,11 +11489,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11538: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11492: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11542: \$? = $ac_status" >&5
+   echo "$as_me:11496: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11639,11 +11593,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11642: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11596: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11646: \$? = $ac_status" >&5
+   echo "$as_me:11600: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14319,703 +14273,6 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-want_ecomix_image_loader_gif="yes"
-want_ecomix_image_loader_jpeg="yes"
-want_ecomix_image_loader_pmaps="yes"
-want_ecomix_image_loader_png="yes"
-want_ecomix_image_loader_svg="yes"
-want_ecomix_image_loader_tiff="yes"
-want_ecomix_image_loader_xpm="yes"
-
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_gif}"
-have_ecomix_image_loader_gif="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_gif+set}" = set; then
-  enableval=$enable_image_loader_gif; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable Gif image loader" >&5
-echo $ECHO_N "checking whether to enable Gif image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="no"
-ecomix_image_loader_gif_cflags=""
-ecomix_image_loader_gif_libs=""
-
-if test "${ac_cv_header_gif_lib_h+set}" = set; then
-  { echo "$as_me:$LINENO: checking for gif_lib.h" >&5
-echo $ECHO_N "checking for gif_lib.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_gif_lib_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_gif_lib_h" >&5
-echo "${ECHO_T}$ac_cv_header_gif_lib_h" >&6; }
-else
-  # Is the header compilable?
-{ echo "$as_me:$LINENO: checking gif_lib.h usability" >&5
-echo $ECHO_N "checking gif_lib.h usability... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <gif_lib.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ echo "$as_me:$LINENO: checking gif_lib.h presence" >&5
-echo $ECHO_N "checking gif_lib.h presence... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <gif_lib.h>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: gif_lib.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: gif_lib.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: gif_lib.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: gif_lib.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: gif_lib.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: gif_lib.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: gif_lib.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: gif_lib.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: gif_lib.h: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to saitmoh@gmail.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ echo "$as_me:$LINENO: checking for gif_lib.h" >&5
-echo $ECHO_N "checking for gif_lib.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_gif_lib_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_gif_lib_h=$ac_header_preproc
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_gif_lib_h" >&5
-echo "${ECHO_T}$ac_cv_header_gif_lib_h" >&6; }
-
-fi
-if test $ac_cv_header_gif_lib_h = yes; then
-  have_dep="yes"
-fi
-
-
-
-if test "x${have_dep}"  = "xyes" ; then
-   { echo "$as_me:$LINENO: checking for DGifOpenFileName in -lgif" >&5
-echo $ECHO_N "checking for DGifOpenFileName in -lgif... $ECHO_C" >&6; }
-if test "${ac_cv_lib_gif_DGifOpenFileName+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgif  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char DGifOpenFileName ();
-int
-main ()
-{
-return DGifOpenFileName ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_gif_DGifOpenFileName=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_gif_DGifOpenFileName=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_gif_DGifOpenFileName" >&5
-echo "${ECHO_T}$ac_cv_lib_gif_DGifOpenFileName" >&6; }
-if test $ac_cv_lib_gif_DGifOpenFileName = yes; then
-
-       ecomix_image_loader_gif_libs="-lgif"
-
-else
-  have_dep="no"
-
-fi
-
-
-   if test "x${have_dep}"  = "xno" ; then
-      { echo "$as_me:$LINENO: checking for DGifOpenFileName in -lungif" >&5
-echo $ECHO_N "checking for DGifOpenFileName in -lungif... $ECHO_C" >&6; }
-if test "${ac_cv_lib_ungif_DGifOpenFileName+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lungif  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char DGifOpenFileName ();
-int
-main ()
-{
-return DGifOpenFileName ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_ungif_DGifOpenFileName=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_ungif_DGifOpenFileName=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_ungif_DGifOpenFileName" >&5
-echo "${ECHO_T}$ac_cv_lib_ungif_DGifOpenFileName" >&6; }
-if test $ac_cv_lib_ungif_DGifOpenFileName = yes; then
-
-          have_dep="yes"
-          ecomix_image_loader_gif_libs="-lungif"
-
-
-fi
-
-   fi
-fi
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_gif="yes"
-else
-  have_ecomix_image_loader_gif="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_gif}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: Gif dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: Gif dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_gif}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_GIF 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_gif}" = "xyes"; then
-  HAVE_GIF_TRUE=
-  HAVE_GIF_FALSE='#'
-else
-  HAVE_GIF_TRUE='#'
-  HAVE_GIF_FALSE=
-fi
-
-
-
-
-
-
-
-have_ecomix_image_saver_jpeg="no"
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_jpeg}"
-have_ecomix_image_loader_jpeg="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_jpeg+set}" = set; then
-  enableval=$enable_image_loader_jpeg; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable Jpeg image loader" >&5
-echo $ECHO_N "checking whether to enable Jpeg image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="no"
-ecomix_image_loader_jpeg_cflags=""
-ecomix_image_loader_jpeg_libs=""
-
-if test "${ac_cv_header_jpeglib_h+set}" = set; then
-  { echo "$as_me:$LINENO: checking for jpeglib.h" >&5
-echo $ECHO_N "checking for jpeglib.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_jpeglib_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_jpeglib_h" >&5
-echo "${ECHO_T}$ac_cv_header_jpeglib_h" >&6; }
-else
-  # Is the header compilable?
-{ echo "$as_me:$LINENO: checking jpeglib.h usability" >&5
-echo $ECHO_N "checking jpeglib.h usability... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <jpeglib.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ echo "$as_me:$LINENO: checking jpeglib.h presence" >&5
-echo $ECHO_N "checking jpeglib.h presence... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <jpeglib.h>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: jpeglib.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: jpeglib.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: jpeglib.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: jpeglib.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: jpeglib.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: jpeglib.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: jpeglib.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: jpeglib.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: jpeglib.h: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to saitmoh@gmail.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ echo "$as_me:$LINENO: checking for jpeglib.h" >&5
-echo $ECHO_N "checking for jpeglib.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_jpeglib_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_jpeglib_h=$ac_header_preproc
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_jpeglib_h" >&5
-echo "${ECHO_T}$ac_cv_header_jpeglib_h" >&6; }
-
-fi
-if test $ac_cv_header_jpeglib_h = yes; then
-  have_dep="yes"
-fi
-
-
-
-if test "x${have_dep}"  = "xyes" ; then
-   { echo "$as_me:$LINENO: checking for jpeg_CreateDecompress in -ljpeg" >&5
-echo $ECHO_N "checking for jpeg_CreateDecompress in -ljpeg... $ECHO_C" >&6; }
-if test "${ac_cv_lib_jpeg_jpeg_CreateDecompress+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ljpeg  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char jpeg_CreateDecompress ();
-int
-main ()
-{
-return jpeg_CreateDecompress ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_jpeg_jpeg_CreateDecompress=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_jpeg_jpeg_CreateDecompress=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_jpeg_jpeg_CreateDecompress" >&5
-echo "${ECHO_T}$ac_cv_lib_jpeg_jpeg_CreateDecompress" >&6; }
-if test $ac_cv_lib_jpeg_jpeg_CreateDecompress = yes; then
-  ecomix_image_loader_jpeg_libs="-ljpeg"
-else
-  have_dep="no"
-
-fi
-
-fi
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_jpeg="yes"
-else
-  have_ecomix_image_loader_jpeg="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_jpeg}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: Jpeg dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: Jpeg dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_jpeg}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_JPEG 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_jpeg}" = "xyes"; then
-  HAVE_JPEG_TRUE=
-  HAVE_JPEG_FALSE='#'
-else
-  HAVE_JPEG_TRUE='#'
-  HAVE_JPEG_FALSE=
-fi
-
-
-
-
-
-
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_pmaps}"
-have_ecomix_image_loader_pmaps="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_pmaps+set}" = set; then
-  enableval=$enable_image_loader_pmaps; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable PMAPS image loader" >&5
-echo $ECHO_N "checking whether to enable PMAPS image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="yes"
-ecomix_image_loader_pmaps_cflags=""
-ecomix_image_loader_pmaps_libs=""
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_pmaps="yes"
-else
-  have_ecomix_image_loader_pmaps="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_pmaps}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: PMAPS dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: PMAPS dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_pmaps}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_PMAPS 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_pmaps}" = "xyes"; then
-  HAVE_PMAPS_TRUE=
-  HAVE_PMAPS_FALSE='#'
-else
-  HAVE_PMAPS_TRUE='#'
-  HAVE_PMAPS_FALSE=
-fi
-
-
-
-
-
-
-
 
 
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
@@ -15136,941 +14393,6 @@ echo "${ECHO_T}no" >&6; }
 	fi
 
 fi
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_png}"
-have_ecomix_image_loader_png="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_png+set}" = set; then
-  enableval=$enable_image_loader_png; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable PNG image loader" >&5
-echo $ECHO_N "checking whether to enable PNG image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="no"
-ecomix_image_loader_png_cflags=""
-ecomix_image_loader_png_libs=""
-
-if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng12\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng12") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for PNG" >&5
-echo $ECHO_N "checking for PNG... $ECHO_C" >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_CFLAGS"; then
-        pkg_cv_PNG_CFLAGS="$PNG_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng12\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng12") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_CFLAGS=`$PKG_CONFIG --cflags "libpng12" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_LIBS"; then
-        pkg_cv_PNG_LIBS="$PNG_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng12\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng12") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_LIBS=`$PKG_CONFIG --libs "libpng12" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libpng12"`
-        else
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libpng12"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PNG_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-                have_dep="no"
-elif test $pkg_failed = untried; then
-	have_dep="no"
-else
-	PNG_CFLAGS=$pkg_cv_PNG_CFLAGS
-	PNG_LIBS=$pkg_cv_PNG_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	have_dep="yes"
-fi
-else
-  if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng10\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng10") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for PNG" >&5
-echo $ECHO_N "checking for PNG... $ECHO_C" >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_CFLAGS"; then
-        pkg_cv_PNG_CFLAGS="$PNG_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng10\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng10") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_CFLAGS=`$PKG_CONFIG --cflags "libpng10" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_LIBS"; then
-        pkg_cv_PNG_LIBS="$PNG_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng10\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng10") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_LIBS=`$PKG_CONFIG --libs "libpng10" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libpng10"`
-        else
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libpng10"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PNG_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-                have_dep="no"
-elif test $pkg_failed = untried; then
-	have_dep="no"
-else
-	PNG_CFLAGS=$pkg_cv_PNG_CFLAGS
-	PNG_LIBS=$pkg_cv_PNG_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	have_dep="yes"
-fi
-else
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for PNG" >&5
-echo $ECHO_N "checking for PNG... $ECHO_C" >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_CFLAGS"; then
-        pkg_cv_PNG_CFLAGS="$PNG_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_CFLAGS=`$PKG_CONFIG --cflags "libpng" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PNG_LIBS"; then
-        pkg_cv_PNG_LIBS="$PNG_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libpng\"") >&5
-  ($PKG_CONFIG --exists --print-errors "libpng") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_PNG_LIBS=`$PKG_CONFIG --libs "libpng" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libpng"`
-        else
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libpng"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PNG_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-                have_dep="no"
-elif test $pkg_failed = untried; then
-	have_dep="no"
-else
-	PNG_CFLAGS=$pkg_cv_PNG_CFLAGS
-	PNG_LIBS=$pkg_cv_PNG_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	have_dep="yes"
-fi
-fi
-
-fi
-
-ecomix_image_loader_png_cflags="${PNG_CFLAGS}"
-ecomix_image_loader_png_libs="${PNG_LIBS}"
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_png="yes"
-else
-  have_ecomix_image_loader_png="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_png}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: PNG dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: PNG dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_png}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_PNG 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_png}" = "xyes"; then
-  HAVE_PNG_TRUE=
-  HAVE_PNG_FALSE='#'
-else
-  HAVE_PNG_TRUE='#'
-  HAVE_PNG_FALSE=
-fi
-
-
-
-
-
-
-
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_svg}"
-have_ecomix_image_loader_svg="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_svg+set}" = set; then
-  enableval=$enable_image_loader_svg; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable SVG image loader" >&5
-echo $ECHO_N "checking whether to enable SVG image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="no"
-ecomix_image_loader_svg_cflags=""
-ecomix_image_loader_svg_libs=""
-
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for SVG" >&5
-echo $ECHO_N "checking for SVG... $ECHO_C" >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SVG_CFLAGS"; then
-        pkg_cv_SVG_CFLAGS="$SVG_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"librsvg-2.0 >= 2.14.0\"") >&5
-  ($PKG_CONFIG --exists --print-errors "librsvg-2.0 >= 2.14.0") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_SVG_CFLAGS=`$PKG_CONFIG --cflags "librsvg-2.0 >= 2.14.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SVG_LIBS"; then
-        pkg_cv_SVG_LIBS="$SVG_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"librsvg-2.0 >= 2.14.0\"") >&5
-  ($PKG_CONFIG --exists --print-errors "librsvg-2.0 >= 2.14.0") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_SVG_LIBS=`$PKG_CONFIG --libs "librsvg-2.0 >= 2.14.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        SVG_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "librsvg-2.0 >= 2.14.0"`
-        else
-	        SVG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "librsvg-2.0 >= 2.14.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$SVG_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-                have_svg="no"
-
-elif test $pkg_failed = untried; then
-	have_svg="no"
-
-else
-	SVG_CFLAGS=$pkg_cv_SVG_CFLAGS
-	SVG_LIBS=$pkg_cv_SVG_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	have_dep="yes"
-fi
-
-if test "x${have_dep}" = "xyes" ; then
-   ecomix_image_loader_svg_cflags="${SVG_CFLAGS}"
-   ecomix_image_loader_svg_libs="${SVG_LIBS}"
-fi
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_svg="yes"
-else
-  have_ecomix_image_loader_svg="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_svg}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: SVG dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: SVG dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_svg}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_SVG 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_svg}" = "xyes"; then
-  HAVE_SVG_TRUE=
-  HAVE_SVG_FALSE='#'
-else
-  HAVE_SVG_TRUE='#'
-  HAVE_SVG_FALSE=
-fi
-
-
-
-
-
-
-
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_tiff}"
-have_ecomix_image_loader_tiff="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_tiff+set}" = set; then
-  enableval=$enable_image_loader_tiff; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable Tiff image loader" >&5
-echo $ECHO_N "checking whether to enable Tiff image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="no"
-ecomix_image_loader_tiff_cflags=""
-ecomix_image_loader_tiff_libs=""
-
-if test "${ac_cv_header_tiffio_h+set}" = set; then
-  { echo "$as_me:$LINENO: checking for tiffio.h" >&5
-echo $ECHO_N "checking for tiffio.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_tiffio_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_tiffio_h" >&5
-echo "${ECHO_T}$ac_cv_header_tiffio_h" >&6; }
-else
-  # Is the header compilable?
-{ echo "$as_me:$LINENO: checking tiffio.h usability" >&5
-echo $ECHO_N "checking tiffio.h usability... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <tiffio.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ echo "$as_me:$LINENO: checking tiffio.h presence" >&5
-echo $ECHO_N "checking tiffio.h presence... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <tiffio.h>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: tiffio.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: tiffio.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: tiffio.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: tiffio.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: tiffio.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: tiffio.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: tiffio.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: tiffio.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: tiffio.h: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------------- ##
-## Report this to saitmoh@gmail.com ##
-## -------------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ echo "$as_me:$LINENO: checking for tiffio.h" >&5
-echo $ECHO_N "checking for tiffio.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_tiffio_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_tiffio_h=$ac_header_preproc
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_tiffio_h" >&5
-echo "${ECHO_T}$ac_cv_header_tiffio_h" >&6; }
-
-fi
-if test $ac_cv_header_tiffio_h = yes; then
-  have_dep="yes"
-fi
-
-
-
-if test "x${have_dep}"  = "xyes" ; then
-   { echo "$as_me:$LINENO: checking for TIFFReadScanline in -ltiff" >&5
-echo $ECHO_N "checking for TIFFReadScanline in -ltiff... $ECHO_C" >&6; }
-if test "${ac_cv_lib_tiff_TIFFReadScanline+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char TIFFReadScanline ();
-int
-main ()
-{
-return TIFFReadScanline ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_tiff_TIFFReadScanline=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_tiff_TIFFReadScanline=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_tiff_TIFFReadScanline" >&5
-echo "${ECHO_T}$ac_cv_lib_tiff_TIFFReadScanline" >&6; }
-if test $ac_cv_lib_tiff_TIFFReadScanline = yes; then
-
-       ecomix_image_loader_tiff_libs="-ltiff"
-
-else
-  have_dep="no"
-
-fi
-
-
-   if test "x${have_dep}"  = "xno" ; then
-      { echo "$as_me:$LINENO: checking for TIFFReadScanline in -ltiff" >&5
-echo $ECHO_N "checking for TIFFReadScanline in -ltiff... $ECHO_C" >&6; }
-if test "${ac_cv_lib_tiff_TIFFReadScanline+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char TIFFReadScanline ();
-int
-main ()
-{
-return TIFFReadScanline ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_tiff_TIFFReadScanline=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_tiff_TIFFReadScanline=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_tiff_TIFFReadScanline" >&5
-echo "${ECHO_T}$ac_cv_lib_tiff_TIFFReadScanline" >&6; }
-if test $ac_cv_lib_tiff_TIFFReadScanline = yes; then
-
-          have_dep="yes"
-          ecomix_image_loader_tiff_libs="-ltiff -ljpeg -lz -lm"
-
-
-fi
-
-   fi
-
-   if test "x${have_dep}"  = "xno" ; then
-      { echo "$as_me:$LINENO: checking for TIFFReadScanline in -ltiff34" >&5
-echo $ECHO_N "checking for TIFFReadScanline in -ltiff34... $ECHO_C" >&6; }
-if test "${ac_cv_lib_tiff34_TIFFReadScanline+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff34  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char TIFFReadScanline ();
-int
-main ()
-{
-return TIFFReadScanline ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_tiff34_TIFFReadScanline=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_tiff34_TIFFReadScanline=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_tiff34_TIFFReadScanline" >&5
-echo "${ECHO_T}$ac_cv_lib_tiff34_TIFFReadScanline" >&6; }
-if test $ac_cv_lib_tiff34_TIFFReadScanline = yes; then
-
-          have_dep="yes"
-          ecomix_image_loader_tiff_libs="-ltiff34 -ljpeg -lz -lm"
-
-
-fi
-
-   fi
-fi
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_tiff="yes"
-else
-  have_ecomix_image_loader_tiff="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_tiff}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: Tiff dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: Tiff dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_tiff}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_TIFF 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_tiff}" = "xyes"; then
-  HAVE_TIFF_TRUE=
-  HAVE_TIFF_FALSE='#'
-else
-  HAVE_TIFF_TRUE='#'
-  HAVE_TIFF_FALSE=
-fi
-
-
-
-
-
-
-
-
-
-
-
-
-want_loader="${want_ecomix_image_loader_xpm}"
-have_ecomix_image_loader_xpm="no"
-
-# Check whether --enable-image-loader-[]DOWN was given.
-if test "${enable_image_loader_xpm+set}" = set; then
-  enableval=$enable_image_loader_xpm; want_loader=${enableval}
-
-fi
-
-
-{ echo "$as_me:$LINENO: checking whether to enable XPM image loader" >&5
-echo $ECHO_N "checking whether to enable XPM image loader... $ECHO_C" >&6; }
-{ echo "$as_me:$LINENO: result: ${want_loader}" >&5
-echo "${ECHO_T}${want_loader}" >&6; }
-
-if test "x${want_loader}" = "xyes" -o "x${want_loader}" = "xauto"; then
-
-
-have_dep="yes"
-ecomix_image_loader_xpm_cflags=""
-ecomix_image_loader_xpm_libs=""
-
-
-
-
-if test "x${have_dep}" = "xyes" ; then
-  have_ecomix_image_loader_xpm="yes"
-else
-  have_ecomix_image_loader_xpm="no"
-fi
-
-
-fi
-
-if test "x${have_ecomix_image_loader_xpm}" = "xno" -a "x${want_loader}" = "xyes" -a "x${use_strict}" = "xyes" ; then
-   { { echo "$as_me:$LINENO: error: XPM dependencies not found (strict dependencies checking)" >&5
-echo "$as_me: error: XPM dependencies not found (strict dependencies checking)" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "x${have_ecomix_image_loader_xpm}" = "xyes" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_XPM 1
-_ACEOF
-
-fi
-
- if test "x${have_ecomix_image_loader_xpm}" = "xyes"; then
-  HAVE_XPM_TRUE=
-  HAVE_XPM_FALSE='#'
-else
-  HAVE_XPM_TRUE='#'
-  HAVE_XPM_FALSE=
-fi
-
-
-
-
-
-
-src/Makefile
-
 
 pkg_failed=no
 { echo "$as_me:$LINENO: checking for ECORE" >&5
@@ -16248,6 +14570,138 @@ See \`config.log' for more details." >&2;}
 else
 	ECORE_CFLAGS=$pkg_cv_ECORE_CFLAGS
 	ECORE_LIBS=$pkg_cv_ECORE_LIBS
+        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+	:
+fi
+
+
+pkg_failed=no
+{ echo "$as_me:$LINENO: checking for GraphicsMagick" >&5
+echo $ECHO_N "checking for GraphicsMagick... $ECHO_C" >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GraphicsMagick_CFLAGS"; then
+        pkg_cv_GraphicsMagick_CFLAGS="$GraphicsMagick_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"
+	GraphicsMagick
+\"") >&5
+  ($PKG_CONFIG --exists --print-errors "
+	GraphicsMagick
+") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GraphicsMagick_CFLAGS=`$PKG_CONFIG --cflags "
+	GraphicsMagick
+" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GraphicsMagick_LIBS"; then
+        pkg_cv_GraphicsMagick_LIBS="$GraphicsMagick_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"
+	GraphicsMagick
+\"") >&5
+  ($PKG_CONFIG --exists --print-errors "
+	GraphicsMagick
+") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GraphicsMagick_LIBS=`$PKG_CONFIG --libs "
+	GraphicsMagick
+" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GraphicsMagick_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "
+	GraphicsMagick
+"`
+        else
+	        GraphicsMagick_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "
+	GraphicsMagick
+"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GraphicsMagick_PKG_ERRORS" >&5
+
+	{ { echo "$as_me:$LINENO: error: Package requirements (
+	GraphicsMagick
+) were not met:
+
+$GraphicsMagick_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables GraphicsMagick_CFLAGS
+and GraphicsMagick_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+" >&5
+echo "$as_me: error: Package requirements (
+	GraphicsMagick
+) were not met:
+
+$GraphicsMagick_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables GraphicsMagick_CFLAGS
+and GraphicsMagick_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+" >&2;}
+   { (exit 1); exit 1; }; }
+elif test $pkg_failed = untried; then
+	{ { echo "$as_me:$LINENO: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables GraphicsMagick_CFLAGS
+and GraphicsMagick_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details." >&5
+echo "$as_me: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables GraphicsMagick_CFLAGS
+and GraphicsMagick_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+	GraphicsMagick_CFLAGS=$pkg_cv_GraphicsMagick_CFLAGS
+	GraphicsMagick_LIBS=$pkg_cv_GraphicsMagick_LIBS
         { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
 	:
@@ -16912,55 +15366,6 @@ echo "$as_me: error: conditional \"am__fastdepCC\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${HAVE_GIF_TRUE}" && test -z "${HAVE_GIF_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_GIF\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_GIF\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_JPEG_TRUE}" && test -z "${HAVE_JPEG_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_JPEG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_JPEG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_PMAPS_TRUE}" && test -z "${HAVE_PMAPS_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_PMAPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_PMAPS\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_PNG_TRUE}" && test -z "${HAVE_PNG_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_PNG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_PNG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_SVG_TRUE}" && test -z "${HAVE_SVG_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_SVG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_SVG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_TIFF_TRUE}" && test -z "${HAVE_TIFF_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_TIFF\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_TIFF\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_XPM_TRUE}" && test -z "${HAVE_XPM_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_XPM\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_XPM\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -17589,9 +15994,9 @@ RANLIB!$RANLIB$ac_delim
 DSYMUTIL!$DSYMUTIL$ac_delim
 NMEDIT!$NMEDIT$ac_delim
 LIBTOOL!$LIBTOOL$ac_delim
-ecomix_image_loader_gif_cflags!$ecomix_image_loader_gif_cflags$ac_delim
-ecomix_image_loader_gif_libs!$ecomix_image_loader_gif_libs$ac_delim
-HAVE_GIF_TRUE!$HAVE_GIF_TRUE$ac_delim
+PKG_CONFIG!$PKG_CONFIG$ac_delim
+ECORE_CFLAGS!$ECORE_CFLAGS$ac_delim
+ECORE_LIBS!$ECORE_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -17633,43 +16038,13 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-HAVE_GIF_FALSE!$HAVE_GIF_FALSE$ac_delim
-ecomix_image_loader_jpeg_cflags!$ecomix_image_loader_jpeg_cflags$ac_delim
-ecomix_image_loader_jpeg_libs!$ecomix_image_loader_jpeg_libs$ac_delim
-HAVE_JPEG_TRUE!$HAVE_JPEG_TRUE$ac_delim
-HAVE_JPEG_FALSE!$HAVE_JPEG_FALSE$ac_delim
-ecomix_image_loader_pmaps_cflags!$ecomix_image_loader_pmaps_cflags$ac_delim
-ecomix_image_loader_pmaps_libs!$ecomix_image_loader_pmaps_libs$ac_delim
-HAVE_PMAPS_TRUE!$HAVE_PMAPS_TRUE$ac_delim
-HAVE_PMAPS_FALSE!$HAVE_PMAPS_FALSE$ac_delim
-PKG_CONFIG!$PKG_CONFIG$ac_delim
-PNG_CFLAGS!$PNG_CFLAGS$ac_delim
-PNG_LIBS!$PNG_LIBS$ac_delim
-ecomix_image_loader_png_cflags!$ecomix_image_loader_png_cflags$ac_delim
-ecomix_image_loader_png_libs!$ecomix_image_loader_png_libs$ac_delim
-HAVE_PNG_TRUE!$HAVE_PNG_TRUE$ac_delim
-HAVE_PNG_FALSE!$HAVE_PNG_FALSE$ac_delim
-SVG_CFLAGS!$SVG_CFLAGS$ac_delim
-SVG_LIBS!$SVG_LIBS$ac_delim
-ecomix_image_loader_svg_cflags!$ecomix_image_loader_svg_cflags$ac_delim
-ecomix_image_loader_svg_libs!$ecomix_image_loader_svg_libs$ac_delim
-HAVE_SVG_TRUE!$HAVE_SVG_TRUE$ac_delim
-HAVE_SVG_FALSE!$HAVE_SVG_FALSE$ac_delim
-ecomix_image_loader_tiff_cflags!$ecomix_image_loader_tiff_cflags$ac_delim
-ecomix_image_loader_tiff_libs!$ecomix_image_loader_tiff_libs$ac_delim
-HAVE_TIFF_TRUE!$HAVE_TIFF_TRUE$ac_delim
-HAVE_TIFF_FALSE!$HAVE_TIFF_FALSE$ac_delim
-ecomix_image_loader_xpm_cflags!$ecomix_image_loader_xpm_cflags$ac_delim
-ecomix_image_loader_xpm_libs!$ecomix_image_loader_xpm_libs$ac_delim
-HAVE_XPM_TRUE!$HAVE_XPM_TRUE$ac_delim
-HAVE_XPM_FALSE!$HAVE_XPM_FALSE$ac_delim
-ECORE_CFLAGS!$ECORE_CFLAGS$ac_delim
-ECORE_LIBS!$ECORE_LIBS$ac_delim
+GraphicsMagick_CFLAGS!$GraphicsMagick_CFLAGS$ac_delim
+GraphicsMagick_LIBS!$GraphicsMagick_LIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 34; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 4; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

@@ -2,13 +2,13 @@ Source: ecomix
 Section: graphics
 Priority: optional
 Maintainer: saitMoh <saitMoh@gmail.com>
-Build-Depends: cdbs, debhelper (>= 6), libarchive-dev, libmagic-dev, libeina-dev, libecore-dev
+Build-Depends: cdbs, debhelper (>= 6), libarchive-dev, libmagic-dev, libeina-dev, libecore-dev, libgraphicsmagick1-dev
 Standards-Version: 3.7.3
 Homepage: http://www.enlightenment.org
 
 Package: ecomix
 Architecture: any
-Depends: ${shlibs:Depends}, libecore-evas0, libecore0-file, libmagic1, libarchive1
+Depends: ${shlibs:Depends}, libecore-evas0, libecore0-file, libmagic1, libarchive1, libgraphicsmagick3
 Description: Extremly simple image viewer from archive
  Extremly simple image viewer based on ecore-evas and libarchive. Image 
  are read directly from archive without extracting them to disk.
