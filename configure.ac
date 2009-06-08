@@ -26,7 +26,7 @@ PKG_CHECK_MODULES([ECORE], [
 ])
 
 PKG_CHECK_MODULES([GraphicsMagick], [
-	GraphicsMagick
+	GraphicsMagickWand
 ])
 
 AC_CHECK_HEADER(archive.h)

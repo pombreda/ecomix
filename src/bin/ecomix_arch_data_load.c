@@ -522,7 +522,7 @@ void ecomix_arch_init() {
       eina_hash_add(mimetype_file, "image/png",                "libevas");
       eina_hash_add(mimetype_file, "image/jpeg",               "libevas");
       eina_hash_add(mimetype_file, "image/tiff",               "libevas");
-      eina_hash_add(mimetype_file, "image/svg+xml",            "libevas");
+      // eina_hash_add(mimetype_file, "image/svg+xml",            "libevas");
       eina_hash_add(mimetype_file, "image/x-xpixmap",          "libevas");
       // eina_hash_add(mimetype_file, "text/x-c",                 "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-anymap",  "libevas");
@@ -596,7 +596,7 @@ void ecomix_arch_init() {
       eina_hash_add(mimetype_buffer, "image/jpeg", &libgm);
       eina_hash_add(mimetype_buffer, "image/tiff", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-xcf", &libgm);
-      eina_hash_add(mimetype_buffer, "image/svg+xml", &libgm);
+      // eina_hash_add(mimetype_buffer, "image/svg+xml", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-xpixmap", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-portable-anymap",  &libgm);
       eina_hash_add(mimetype_buffer, "image/x-portable-bitmap",  &libgm);

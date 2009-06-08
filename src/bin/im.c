@@ -1,18 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <wand/wand_api.h>
 #include <magick/api.h>
 #include "im.h"
 
 static int libgm_initialized = 0;
-static ExceptionInfo exception;
-static ImageInfo *image_info;
 
 static void libgm_init() {
    if(libgm_initialized == 0) {
       InitializeMagick(NULL);
-      GetExceptionInfo(&exception);
-      image_info = CloneImageInfo((ImageInfo *) NULL);
 
       libgm_initialized = 1;
    }
@@ -64,48 +61,50 @@ _unpremul_data(DATA32 *data, unsigned int len)
 
 int ecomix_image_load_fmem_head_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
 {
+   MagickWand *wand = NULL;
    int ret = 0;
-   Image *image;
    if(!buf) return;
 
    libgm_init();
-   // image = PingBlob(image_info, buf, size, &exception);
-   image = BlobToImage(image_info, buf, size, &exception);
-   if(image) {
-      ie->w = image->columns;
-      ie->h = image->rows;
-      DestroyImage(image);
+   wand = NewMagickWand();
+   if(! wand) return ret;
+
+   ret = MagickReadImageBlob(wand, buf, size);
+   if(ret) {
+      ie->w = MagickGetImageWidth(wand); 
+      ie->h = MagickGetImageHeight(wand);
       ret = 1;
    }
 
+   DestroyMagickWand(wand);
    return ret;
 }
 
 int ecomix_image_load_fmem_data_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
 {
+   MagickWand *wand = NULL;
    int ret = 0;
    Image *image;
    if(!buf) return;
 
    libgm_init();
-   image = BlobToImage(image_info, buf, size, &exception);
-   if(image) {
+   wand = NewMagickWand();
+   if(! wand) return ret;
+
+   ret = MagickReadImageBlob(wand, buf, size);
+   if(ret) {
       size_t siz;
-      PixelPacket *pix;
-      ie->w = image->columns;
-      ie->h = image->rows;
+      ie->w = MagickGetImageWidth(wand);
+      ie->h = MagickGetImageHeight(wand);
 
       if(ie->surface) free(ie->surface);
       siz = ie->w * ie->h * sizeof(DATA32);
       ie->surface = malloc(siz);
-      ie->flags.alpha = (image->matte) ? 1 : 0;
       if(ie->surface) {
-	 pix = GetImagePixels(image, 0, 0, image->columns, image->rows);
-	 memcpy(ie->surface, pix, siz);
+	 MagickGetImagePixels(wand, 0, 0, ie->w, ie->h, "BGRA", CharPixel, ie->surface);
       }
-      DestroyImage(image);
-      ret = 1;
    }
 
+   DestroyMagickWand(wand);
    return ret;
 }
