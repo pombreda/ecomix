@@ -1,0 +1,22 @@
+syntax: glob
+
+ecomix
+*~
+.*.swp
+*.o
+.config
+*-stamp
+Makefile
+autom4te.cache
+config.guess.cdbs-orig
+config.h
+config.log
+config.status
+config.sub.cdbs-orig
+debian/ecomix.debhelper.log
+debian/ecomix.substvars
+debian/files
+debian/stamp-autotools-files
+debian/stamp-makefile-build
+libtool
+stamp-h1

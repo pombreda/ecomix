@@ -1,0 +1,8 @@
+Image viewer from archives (tar, zip, rar, etc) with minimalist GUI. Use
+Evas and Ecore from EFL (http://trac.enlightenment.org/e/wiki) for Gui.
+Libarchive or external programme (unar, lha, 7z) to extract data.
+
+Image are read from memory using fmemopen (glibc only) and duplicate code
+from Evas or using libGraphicsMagick/libGraphicsMagickWand.
+
+
