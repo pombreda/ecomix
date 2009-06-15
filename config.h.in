@@ -15,6 +15,12 @@
 /* Define to 1 if you have the `archive' library (-larchive). */
 #undef HAVE_LIBARCHIVE
 
+/* build with libgraphicsmagick */
+#undef HAVE_LIBGRAPHICSMAGICK
+
+/* build with libgraphicsmagickwand */
+#undef HAVE_LIBGRAPHICSMAGICKWAND
+
 /* Define to 1 if you have the `magic' library (-lmagic). */
 #undef HAVE_LIBMAGIC
 

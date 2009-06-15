@@ -5,6 +5,14 @@ INCLUDES = \
 -I$(top_srcdir)/ \
 @ECORE_CFLAGS@
 
+if HAVE_LIBGRAPHICSMAGICK
+INCLUDES += @GraphicsMagick_CFLAGS@
+endif
+
+if HAVE_LIBGRAPHICSMAGICKWAND
+INCLUDES += @GraphicsMagickwand_CFLAGS@
+endif
+
 if HAVE_PNG
 INCLUDES += @ecomix_image_loader_png_cflags@
 endif
@@ -32,6 +40,7 @@ ecomix_SOURCES = \
 ecomix_arch_data_load.c \
 ecomix_image_rotate.c \
 ecomix_main.c \
+im.c \
 evas_image_load_gif.c \
 evas_image_load_png.c \
 evas_image_load_jpeg.c \
@@ -41,6 +50,14 @@ evas_image_load_svg.c \
 evas_image_load_xpm.c
 
 ecomix_LDADD = @ECORE_LIBS@ @LIBS@
+
+if HAVE_LIBGRAPHICSMAGICK
+ecomix_LDADD += @GraphicsMagick_LIBS@
+endif
+
+if HAVE_LIBGRAPHICSMAGICKWAND
+ecomix_LDADD += @GraphicsMagickwand_LIBS@
+endif
 
 if HAVE_PNG
 ecomix_LDADD += @ecomix_image_loader_png_libs@

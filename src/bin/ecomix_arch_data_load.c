@@ -518,6 +518,21 @@ void ecomix_arch_init() {
 
    if(! mimetype_file) {
       mimetype_file = eina_hash_string_superfast_new(NULL);
+#ifdef BUILD_GRAPHICSMAGICK
+      eina_hash_add(mimetype_file, "image/gif",                "libevas");
+      eina_hash_add(mimetype_file, "image/png",                "libevas");
+      eina_hash_add(mimetype_file, "image/jpeg",               "libevas");
+      eina_hash_add(mimetype_file, "image/tiff",               "libevas");
+      // eina_hash_add(mimetype_file, "image/svg+xml",            "libevas");
+      eina_hash_add(mimetype_file, "image/x-xpixmap",          "libevas");
+      // eina_hash_add(mimetype_file, "text/x-c",                 "libevas");
+      eina_hash_add(mimetype_file, "image/x-portable-anymap",  "libevas");
+      eina_hash_add(mimetype_file, "image/x-portable-bitmap",  "libevas");
+      eina_hash_add(mimetype_file, "image/x-portable-graymap", "libevas");
+      eina_hash_add(mimetype_file, "image/x-portable-greymap", "libevas");
+      eina_hash_add(mimetype_file, "image/x-portable-pixmap",  "libevas");
+
+#else
 #ifdef HAVE_GIF
       eina_hash_add(mimetype_file, "image/gif",                "libevas");
 #endif
@@ -543,6 +558,7 @@ void ecomix_arch_init() {
       eina_hash_add(mimetype_file, "image/x-portable-graymap", "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-greymap", "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-pixmap",  "libevas");
+#endif
 #endif
 
       eina_hash_add(mimetype_file, "application/x-tar",   "libarch");
@@ -598,10 +614,32 @@ void ecomix_arch_init() {
    }
 
    if(! mimetype_buffer) {
+#ifdef BUILD_GRAPHICSMAGICK
+      static Ecomix_Buffer_Load libgm;
+#else
       static Ecomix_Buffer_Load gif, png, jpeg, tiff, pmaps, xpm, svg;
+#endif
 
       mimetype_buffer = eina_hash_string_superfast_new(NULL);
 
+#ifdef BUILD_GRAPHICSMAGICK
+      libgm.head = ecomix_image_load_fmem_head_libgm;
+      libgm.data = ecomix_image_load_fmem_data_libgm;
+
+      eina_hash_add(mimetype_buffer, "image/gif",  &libgm);
+      eina_hash_add(mimetype_buffer, "image/png",  &libgm);
+      eina_hash_add(mimetype_buffer, "image/jpeg", &libgm);
+      eina_hash_add(mimetype_buffer, "image/tiff", &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-xcf", &libgm);
+      // eina_hash_add(mimetype_buffer, "image/svg+xml", &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-xpixmap", &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-portable-anymap",  &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-portable-bitmap",  &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-portable-graymap", &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-portable-greymap", &libgm);
+      eina_hash_add(mimetype_buffer, "image/x-portable-pixmap",  &libgm);
+      // eina_hash_add(mimetype_buffer, "text/x-c",        &xpm);
+#else
 #ifdef HAVE_GIF
       gif.head = ecomix_image_load_fmem_head_gif;
       gif.data = ecomix_image_load_fmem_data_gif;
@@ -647,6 +685,7 @@ void ecomix_arch_init() {
       xpm.data = ecomix_image_load_fmem_data_xpm;
       eina_hash_add(mimetype_buffer, "image/x-xpixmap", &xpm);
       // eina_hash_add(mimetype_buffer, "text/x-c",        &xpm);
+#endif
 #endif
    }
 }

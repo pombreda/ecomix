@@ -47,7 +47,7 @@ typedef struct _Ecomix_App {
 } Ecomix_App;
 
 static void ecomix_usage(const char *cmd);
-static Ecomix_App *ecomix_app_init(Ecomix_App *ecomix);
+static Ecomix_App *ecomix_app_init(int argc, char **argv);
 static void ecomix_app_finish(Ecomix_App *ecomix);
 static void destroy_main_window(Ecore_Evas *ee);
 
@@ -498,11 +498,49 @@ resize_window(Ecore_Evas *ee)
    image_fit(ecomix, ecomix->fill_mode);
 }  
 
-static Ecomix_App *ecomix_app_init(Ecomix_App *ecomix) {
+static Ecomix_App *ecomix_app_init(int argc, char **argv) {
+   Ecomix_App *ecomix = NULL;
    Evas_Modifier_Mask mask;
-   int w, h;
+   char *file = NULL;
+   int i = 1, w, h;
+   int r, g, b;
 
-   if(!ecomix) return 0;
+   ecomix = malloc(sizeof(Ecomix_App));
+   if(! ecomix) return NULL;
+   memset(ecomix, 0, sizeof(Ecomix_App));
+
+   ecomix->width = 300;
+   ecomix->height = 300;
+   while(i < argc) {
+      if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")
+	    || !strcmp(argv[i], "-?") || !strcmp(argv[i], "--?")) {
+	 ecomix_usage(argv[0]);
+	 exit(0);
+      } else if(!strcmp(argv[i], "-bg") && (i + 1) < argc) {
+	 int n = sscanf(argv[i+1], "%d,%d,%d", &r, &g, &b);
+	 if(n == 3) {
+	    ecomix->bg_r = r;
+	    ecomix->bg_g = g;
+	    ecomix->bg_b = b;
+	 } else {
+	    ecomix->bgimg = argv[i+1]; 
+	 }
+	 i++;
+      } else if(!strcmp(argv[i], "-g") && (i + 1) < argc) {
+	 int n = sscanf(argv[i+1], "%dx%d", &r, &g);
+	 if(n == 2) {
+	    ecomix->width = r;
+	    ecomix->height = g;
+	 }
+	 i++;
+      } else if(! strcmp(argv[i], "-v")) {
+	 ecomix->verbose = 1;
+      } else if (! file) {
+	 file = argv[i];
+      }
+      i++;
+   }
+   printf("FILE: %s\n", file);
 
    w = ecomix->width; 
    h = ecomix->width;
@@ -609,6 +647,18 @@ static Ecomix_App *ecomix_app_init(Ecomix_App *ecomix) {
 
    ecomix_arch_init();
 
+   if(file) {
+      ecomix->info = ecomix_arch_file_set(file, ecomix->magic);
+      if(ecomix->info) {
+	 ecomix_arch_list_get(ecomix->info);
+	 if(eina_list_count(ecomix->info->list) > 0) {
+	    ecomix->dir_have_arch = ecomix_image_load(ecomix);
+	    ecomix->dir_have_arch = 1;
+	 }
+      } else { // TODO: Read directory
+      }
+   }
+
    return ecomix;
 }
 
@@ -666,41 +716,14 @@ The command line tolols 7z, unrar, lha need to be installed to view content of a
 }
 
 int main(int argc, char **argv) {
-   Ecomix_App ecomix;
-   char *file = NULL;
+   Ecomix_App *ecomix;
    int i = 1;
-   int r, g, b;
    
-   memset(&ecomix, 0, sizeof(Ecomix_App));
-
-   ecomix.width = 300;
-   ecomix.height = 300;
    while(i < argc) {
       if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")
 	    || !strcmp(argv[i], "-?") || !strcmp(argv[i], "--?")) {
 	 ecomix_usage(argv[0]);
 	 exit(0);
-      } else if(!strcmp(argv[i], "-bg") && (i + 1) < argc) {
-	 int n = sscanf(argv[i+1], "%d,%d,%d", &r, &g, &b);
-	 if(n == 3) {
-	    ecomix.bg_r = r;
-	    ecomix.bg_g = g;
-	    ecomix.bg_b = b;
-	 } else {
-	    ecomix.bgimg = argv[i+1]; 
-	 }
-	 i++;
-      } else if(!strcmp(argv[i], "-g") && (i + 1) < argc) {
-	 int n = sscanf(argv[i+1], "%dx%d", &r, &g);
-	 if(n == 2) {
-	    ecomix.width = r;
-	    ecomix.height = g;
-	 }
-	 i++;
-      } else if(! strcmp(argv[i], "-v")) {
-	 ecomix.verbose = 1;
-      } else if (! file) {
-	 file = argv[i];
       }
       i++;
    }
@@ -708,23 +731,11 @@ int main(int argc, char **argv) {
    evas_init();
    ecore_evas_init();
    
-   ecomix_app_init(&ecomix);
-
-   if(file) {
-      ecomix.info = ecomix_arch_file_set(file, ecomix.magic);
-      if(ecomix.info) {
-	 ecomix_arch_list_get(ecomix.info);
-	 if(eina_list_count(ecomix.info->list) > 0) {
-	    ecomix.dir_have_arch = ecomix_image_load(&ecomix);
-	    ecomix.dir_have_arch = 1;
-	 }
-      } else { // TODO: Read directory
-      }
-   }
+   ecomix = ecomix_app_init(argc, argv);
 
    ecore_main_loop_begin();
 
-   ecomix_app_finish(&ecomix);
+   ecomix_app_finish(ecomix);
 
    ecore_shutdown();
    
