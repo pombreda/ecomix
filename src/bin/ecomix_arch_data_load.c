@@ -15,6 +15,7 @@
 
 #include "im.h"
 
+#define ECOMIX_FILE_BUF_SIZE_MAX 16777216
 #define ECOMIX_IMAGE_DATA_READ_BUF 10496
 #define ECOMIX_FILTRE_ARCH_LIST 1
 
@@ -26,8 +27,8 @@ static  int sort_cb(const void *d1, const void *d2);
 Eina_List *ecomix_arch_list_rar_decode(char *buf, size_t size);
 Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size);
 
-Eina_List *ecomix_arch_list_libevas_get(char *archname);
-Eina_List *ecomix_arch_list_libarch_get(char *archname);
+Eina_List *ecomix_arch_list_libevas_get(const char *archname);
+Eina_List *ecomix_arch_list_libarch_get(const char *archname);
 Ecomix_Arch_Info *ecomix_arch_list_pipe_get(Ecomix_Arch_Info *info);
 
 Ecomix_File_Buffer *ecomix_arch_data_libevas_get(Ecomix_Arch_Info *info, char *filename);
@@ -46,19 +47,34 @@ static int sort_cb(const void *d1, const void *d2)
 Eina_List *ecomix_arch_list_rar_decode(char *buf, size_t size)
 {
    Eina_List *l = NULL;
-   char *p = buf, *s = buf;
-   char *f;
+   char *p = buf, *s = buf, *s1, *s2;
+   int sep = 0, cnt = 0;
+   const char *f;
 
    if(buf && size > 0) {
       while(p < (char *) (buf + size)) {
 	 if(*p == '\n') {
 	    *p = 0;
-	    if(ECOMIX_FILTRE_ARCH_LIST || ecore_str_has_extension(s, "png") || ecore_str_has_extension(s, "jpg") || ecore_str_has_extension(s, "jpeg"))
-	    {
-	       f = strdup(s);
-	       l = eina_list_append(l, f);
-	    }
 	    s = p + 1;
+	    if(! strncmp("----------", s, 10)) {
+	       sep = (sep == 0) ? 1 : 0;
+	       continue;
+	    }
+	    if(sep) {
+	       if(cnt == 0) {
+		  s1 = s;
+		  cnt++;
+	       }else if(cnt == 1) {
+		  s2 = s;
+		  cnt++;
+	       } else if(cnt == 2) {
+		  if(s2[58] == 'A') {
+		     f = eina_stringshare_add(s1 +1);
+		     l = eina_list_append(l, f);
+		  }
+		  cnt = 0;
+	       }
+	    }
 	 }
 	 p++;
       }
@@ -71,7 +87,7 @@ Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size)
 {
    Eina_List *l = NULL;
    char *p = buf, *line = buf;
-   char *f;
+   const char *f;
    int sep = 0;
    int pos = 0;
    
@@ -94,7 +110,7 @@ Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size)
 	       if(ECOMIX_FILTRE_ARCH_LIST || ecore_str_has_extension(s, "png") || ecore_str_has_extension(s, "jpg") || ecore_str_has_extension(s, "jpeg") || ecore_str_has_extension(s, "gif") || ecore_str_has_extension(s, "tiff"))
 	       {
 		  // printf("file : %s\n", s);
-		  f = strdup(s);
+		  f = eina_stringshare_add(s);
 		  l = eina_list_append(l, f);
 	       }
 	    }
@@ -111,17 +127,17 @@ Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size)
    return l;
 }
 
-Eina_List *ecomix_arch_list_libevas_get(char *archname) {
+Eina_List *ecomix_arch_list_libevas_get(const char *archname) {
    Eina_List *l = NULL;
-   char *name;
+   const char *name;
 
-   name = strdup(archname);
+   name = eina_stringshare_add(archname);
    l = eina_list_append(l, name);
 
    return l;
 }
 
-Eina_List *ecomix_arch_list_libarch_get(char *archname) {
+Eina_List *ecomix_arch_list_libarch_get(const char *archname) {
    struct archive *a;
    struct archive_entry *entry;
    Eina_List *l = NULL;
@@ -133,15 +149,15 @@ Eina_List *ecomix_arch_list_libarch_get(char *archname) {
    {
       while (archive_read_next_header(a, &entry) == ARCHIVE_OK) 
       {
-	 char *str;
-	 str = strdup(archive_entry_pathname(entry));
+	 const char *str;
+	 str = eina_stringshare_add(archive_entry_pathname(entry));
          if(str[strlen(str) - 1] != '/')
 	    if(ECOMIX_FILTRE_ARCH_LIST || ecore_str_has_extension(str, "png") || ecore_str_has_extension(str, "jpg") || ecore_str_has_extension(str, "jpeg"))
 	       l = eina_list_append(l, str);
 	    else
-	       free(str);
+	       eina_stringshare_del(str);
          else
-            free(str);
+            eina_stringshare_del(str);
 	 archive_read_data_skip(a);
       }
    } 
@@ -173,7 +189,7 @@ Ecomix_Arch_Info *ecomix_arch_list_pipe_get(Ecomix_Arch_Info *info)
       close(pfd[1]);
       
       if(info->type == ECOMIX_ARCH_TYPE_RAR)
-	 execlp("unrar", "unrar", "vb", info->archname, (char *) NULL);
+	 execlp("unrar", "unrar", "vt", info->archname, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_LHA)
 	 execlp("lha", "lha", "l", info->archname, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_7Z)
@@ -191,7 +207,8 @@ Ecomix_Arch_Info *ecomix_arch_list_pipe_get(Ecomix_Arch_Info *info)
       
       buf = malloc(ECOMIX_IMAGE_DATA_READ_BUF);
       p = buf;
-      while ((n = read(pfd[0], p, ECOMIX_IMAGE_DATA_READ_BUF)) > 0) {
+      while ((n = read(pfd[0], p, ECOMIX_IMAGE_DATA_READ_BUF)) > 0
+	    && size < ECOMIX_FILE_BUF_SIZE_MAX) {
 	 // printf("parent: %d : %s\n", n, buf);
 	 size += n;
 	 buf = realloc(buf, size + ECOMIX_IMAGE_DATA_READ_BUF);
@@ -252,10 +269,12 @@ Ecomix_File_Buffer *ecomix_arch_data_libevas_get(Ecomix_Arch_Info *info, char *f
       fseek(f, 0L, SEEK_END);
       size = ftell(f);
       fseek(f, 0L, SEEK_SET);
-      fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
-      fbuf->filename = strdup(filename);
-      fbuf->buf = malloc(size);
-      fbuf->size = fread(fbuf->buf, 1, size, f);
+      if(size < ECOMIX_FILE_BUF_SIZE_MAX) {
+	 fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
+	 fbuf->filename = eina_stringshare_add(filename);
+	 fbuf->buf = malloc(size);
+	 fbuf->size = fread(fbuf->buf, 1, size, f);
+      }
       fclose(f);
    }
 
@@ -283,16 +302,20 @@ Ecomix_File_Buffer *ecomix_arch_data_libarch_get(Ecomix_Arch_Info *info, char *f
 	    char *buf;
 	    size_t size = archive_entry_size(entry);
 
-	    buf = malloc(size);
-	    archive_read_data(a, buf, size);
-	    if(buf) {
-	       fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
-	       if(fbuf) {
-		  fbuf->filename = strdup(filename);
-		  fbuf->buf = buf;
-		  fbuf->size = size;
-	       } else
-		  free(buf);
+	    if(size < ECOMIX_FILE_BUF_SIZE_MAX) {
+	       buf = malloc(size);
+	       archive_read_data(a, buf, size);
+	       if(buf) {
+		  fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
+		  if(fbuf) {
+		     fbuf->filename = eina_stringshare_add(filename);
+		     fbuf->buf = buf;
+		     fbuf->size = size;
+		  } else
+		     free(buf);
+	       } else {
+		  archive_read_data_skip(a);
+	       }
 	    }
 	 } 
 	 else
@@ -347,7 +370,8 @@ Ecomix_File_Buffer *ecomix_arch_data_pipe_get(Ecomix_Arch_Info *info, char *file
       
       buf = malloc(ECOMIX_IMAGE_DATA_READ_BUF);
       p = buf;
-      while ((n = read(pfd[0], p, ECOMIX_IMAGE_DATA_READ_BUF)) > 0) {
+      while ((n = read(pfd[0], p, ECOMIX_IMAGE_DATA_READ_BUF)) > 0
+	    && size < ECOMIX_FILE_BUF_SIZE_MAX) {
 	 // printf("parent: %d %d \n", size, n);
 	 size += n;
 	 buf = realloc(buf, (size + ECOMIX_IMAGE_DATA_READ_BUF));
@@ -359,7 +383,7 @@ Ecomix_File_Buffer *ecomix_arch_data_pipe_get(Ecomix_Arch_Info *info, char *file
       if(buf) {
 	 fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
 	 if(fbuf) {
-	    fbuf->filename = strdup(filename);
+	    fbuf->filename = eina_stringshare_add(filename);
 	    fbuf->buf = buf;
 	    fbuf->size = size;
 	 } else
@@ -398,7 +422,7 @@ Ecomix_File_Buffer *ecomix_arch_data_get(Ecomix_Arch_Info *info, char *filename)
 Ecomix_File_Buffer * ecomix_arch_data_del(Ecomix_File_Buffer *buf)
 {
    if(buf) {
-      if(buf->filename) free(buf->filename);
+      if(buf->filename) eina_stringshare_del(buf->filename);
       if(buf->buf) free(buf->buf);
       free(buf);
    }
@@ -433,7 +457,7 @@ Ecomix_Arch_Info *ecomix_arch_file_set(char *archname, magic_t magic) {
       if(type != ECOMIX_ARCH_TYPE_UNKNOW) {
 	 info = (Ecomix_Arch_Info *) malloc(sizeof(Ecomix_Arch_Info));
 	 if(info) {
-	    info->archname = strdup(archname);
+	    info->archname = eina_stringshare_add(archname);
 	    info->type = type;
 	 }
       }
@@ -445,8 +469,8 @@ Ecomix_Arch_Info *ecomix_arch_file_set(char *archname, magic_t magic) {
 Ecomix_Arch_Info *ecomix_arch_file_del(Ecomix_Arch_Info *info) {
    if(info) {
       char *d;
-      if(info->archname) free(info->archname);
-      if(info->list) EINA_LIST_FREE(info->list, d) free(d);
+      if(info->archname) eina_stringshare_add(info->archname);
+      if(info->list) EINA_LIST_FREE(info->list, d) eina_stringshare_del(d);
 
       free(info);
    }

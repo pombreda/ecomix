@@ -27,6 +27,7 @@
 typedef struct _Ecomix_App {
    Evas *evas;
    Ecore_Evas *ee;
+   Ecore_Idler *idler;
    Evas_Object *image, *container, *text, *bg; /* image = o, container = r */
    int bg_r, bg_g, bg_b;
    int width, height;
@@ -40,8 +41,9 @@ typedef struct _Ecomix_App {
    Eina_Bool dir_have_arch;
    
    int current;             /* index of image in info->list */
-   char *fill_mode; 
-   Ecomix_Image_Orient orient;
+   char *keyname;
+   char *fill_mode, *fill_mode_previous; 
+   Ecomix_Image_Orient orient, orient_previous;
    Evas_Bool fullscreen;
 
 } Ecomix_App;
@@ -107,7 +109,10 @@ static void image_fit(Ecomix_App *ecomix, char *data) {
    // printf("%s : origin: %0.02f %0.02f, area: %d %d, new: %0.02f %0.02f\n", data, ow, oh, nw, nh, dw, dh);
    // ewl_image_scale_set(EWL_IMAGE(im), dw, dw);
    evas_object_image_fill_set(ecomix->image, 0, 0, dw , dh);
-   evas_object_move(ecomix->image, (nw - dw) / 2, 0);
+   if(dh < nh)
+      evas_object_move(ecomix->image, (nw - dw) / 2, (nh - dh) / 2);
+   else
+      evas_object_move(ecomix->image, (nw - dw) / 2, 0);
    evas_object_resize(ecomix->image, dw, dh);
 
 }
@@ -202,15 +207,23 @@ static void ecomix_mouse_wheel_callback(void *data, Evas *e, Evas_Object *o, voi
 {
    Evas_Event_Mouse_Wheel *mouse = einfo;
    Evas_Event_Key_Down key;
+   Ecomix_App *ecomix = data;
+
+   if(ecomix->idler) return;
    if(mouse) {
+      // printf("MOUSE: dir: %d, z: %d\n", mouse->direction, mouse->z);
       memset(&key, 0, sizeof(Evas_Event_Key_Down));
       if(mouse->z < 0)
 	 key.keyname = "Up";
       else if(mouse->z > 0)
 	 key.keyname = "Down";
 
-      if(key.keyname)
+      if(key.keyname) {
 	 ecomix_key_down_callback(data, e, o, &key);
+	 // reload current or image wont display 
+	 if(! strcmp(ecomix->fill_mode, "vfill") && ecomix->info && ecomix->info->type == ECOMIX_ARCH_TYPE_LIBARCH)
+	    ecomix_image_load(ecomix);
+      }
    }
 }
 
@@ -218,6 +231,9 @@ static void ecomix_mouse_down_callback(void *data, Evas *e, Evas_Object *o, void
 {
    Evas_Event_Mouse_Down *mouse = einfo;
    Evas_Event_Key_Down key;
+   Ecomix_App *ecomix = data;
+
+   if(ecomix->idler) return;
    if(mouse) {
       memset(&key, 0, sizeof(Evas_Event_Key_Down));
       if(mouse->button == 3)
@@ -228,6 +244,53 @@ static void ecomix_mouse_down_callback(void *data, Evas *e, Evas_Object *o, void
       if(key.keyname)
 	 ecomix_key_down_callback(data, e, o, &key);
    }
+}
+
+static int ecomix_on_idler(void *data) 
+{
+   Ecomix_App *ecomix = data;
+   Eina_Bool renew = ECORE_CALLBACK_CANCEL, res = 0;
+
+   if(!ecomix) return renew;
+
+   if (ecomix->fill_mode_previous != ecomix->fill_mode 
+	 || ecomix->orient_previous != ecomix->orient) {
+      image_fit(ecomix, ecomix->fill_mode);
+      ecomix->fill_mode_previous = ecomix->fill_mode;
+      ecomix->orient_previous = ecomix->orient;
+   } else {
+      if(ecomix->current < 0) {
+	 ecomix->current = change_archive(ecomix, -1, ecomix->keyname);
+      } else if((!ecomix->info) || (ecomix->info && ecomix->current >= eina_list_count(ecomix->info->list))) {
+	 ecomix->current = change_archive(ecomix, 1, ecomix->keyname);
+      }
+      
+      if(ecomix->info) {
+	 evas_event_freeze(ecomix->evas);
+	 while(res == 0 && eina_list_count(ecomix->info->list) > 0) {
+	    res = ecomix_image_load(ecomix);
+	    if(!res && ecomix->info) {
+	       char *filename = eina_list_nth(ecomix->info->list, ecomix->current);
+	       ecomix->info->list = eina_list_remove(ecomix->info->list, filename);
+	       if(ecomix->verbose)
+		  printf("REMOVE FROM LIST: %d, %s\n", ecomix->current, filename);
+	       eina_stringshare_del(filename);
+	       if(ecomix->current >=  eina_list_count(ecomix->info->list))
+		  ecomix->current = eina_list_count(ecomix->info->list) -1;
+	    } 
+	 }
+	 if(! res) {
+	    evas_object_text_text_set(ecomix->text, "No Image");
+	    evas_object_move(ecomix->text, 10, 10);
+	 }
+	 evas_event_thaw(ecomix->evas);
+      }
+   }
+
+   if(! renew)
+      ecomix->idler = NULL;
+
+   return renew;
 }
 
 static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *einfo)
@@ -244,7 +307,8 @@ static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *
    mode = ecomix->fill_mode;
    orient = ecomix->orient;
 
-   evas_event_freeze(ecomix->evas);
+   if(ecomix->idler) return;
+   // evas_event_freeze(ecomix->evas);
    if(key) {
       if(! strcmp(key->keyname, "Up")) 
       {
@@ -370,6 +434,7 @@ static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *
 	 return;
       }
       
+      /*
       if(ecomix->current < 0) {
 	 ecomix->current = change_archive(ecomix, -1, key->keyname);
 	 ocur = -1;
@@ -386,7 +451,7 @@ static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *
 	       ecomix->info->list = eina_list_remove(ecomix->info->list, filename);
 	       if(ecomix->verbose)
 		  printf("REMOVE FROM LIST: %d, %s\n", ecomix->current, filename);
-	       free(filename);
+	       eina_stringshare_del(filename);
 	       if(ecomix->current >=  eina_list_count(ecomix->info->list))
 		  ecomix->current = eina_list_count(ecomix->info->list) -1;
 	    } 
@@ -399,10 +464,21 @@ static void ecomix_key_down_callback(void *data, Evas *e, Evas_Object *o, void *
       } else if (mode != ecomix->fill_mode || orient != ecomix->orient) {
 	 image_fit(ecomix, ecomix->fill_mode);
       }
+      */
+
+      if(ocur != ecomix->current) {
+	 ecomix->keyname = key->keyname;
+	 ecomix->idler = ecore_idler_add(ecomix_on_idler, ecomix);
+      } else if (mode != ecomix->fill_mode || orient != ecomix->orient) {
+	 ecomix->orient_previous = orient;
+	 ecomix->fill_mode_previous = mode;
+	 ecomix->idler = ecore_idler_add(ecomix_on_idler, ecomix);
+      }
+
       if(ecomix->verbose)
 	 printf("key : %s, %s, %s, %s\n", key->keyname, key->key, key->string, key->compose);
    }
-   evas_event_thaw(ecomix->evas);
+   // evas_event_thaw(ecomix->evas);
 }
 
 static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, const char *file, const char *key, void *buf, size_t size) {
@@ -432,6 +508,7 @@ static void display_image(Ecomix_App *ecomix, const Ecomix_Buffer_Load *load, co
       evas_object_image_smooth_scale_set(ecomix->image, 1);
       evas_object_image_data_update_add(ecomix->image, 0, 0, ie->w, ie->h);
       image_fit(ecomix, ecomix->fill_mode);
+      evas_object_image_data_update_add(ecomix->image, 0, 0, ie->dw, ie->dh);
    }
 }
 
@@ -540,7 +617,6 @@ static Ecomix_App *ecomix_app_init(int argc, char **argv) {
       }
       i++;
    }
-   printf("FILE: %s\n", file);
 
    w = ecomix->width; 
    h = ecomix->width;
@@ -548,6 +624,7 @@ static Ecomix_App *ecomix_app_init(int argc, char **argv) {
    magic_load(ecomix->magic, NULL);
 
    ecomix->fill_mode = "vfill";
+   ecomix->fill_mode_previous = ecomix->fill_mode;
    ecomix->current = 0;
 
    memset(&ecomix->ie, 0, sizeof(Image_Entry));
@@ -576,6 +653,7 @@ static Ecomix_App *ecomix_app_init(int argc, char **argv) {
    }
    
    ecomix->container = evas_object_rectangle_add(ecomix->evas);
+   // ecore_evas_object_associate(ecomix->ee, ecomix->container, ECORE_EVAS_OBJECT_ASSOCIATE_LAYER);
    evas_object_color_set(ecomix->container, ecomix->bg_r, ecomix->bg_g, ecomix->bg_b, 255);
    evas_object_resize(ecomix->container, w, h);
    
@@ -634,11 +712,12 @@ static Ecomix_App *ecomix_app_init(int argc, char **argv) {
    evas_object_key_grab(ecomix->container, "r", mask, ~mask, 0);
    
    evas_object_propagate_events_set(ecomix->image, 1);
+   evas_object_pass_events_set(ecomix->bg, 1);
    evas_object_pass_events_set(ecomix->image, 1);
    evas_object_pass_events_set(ecomix->text, 1);
+   evas_object_event_callback_add(ecomix->container, EVAS_CALLBACK_KEY_DOWN, ecomix_key_down_callback, ecomix);
    evas_object_event_callback_add(ecomix->container, EVAS_CALLBACK_MOUSE_WHEEL, ecomix_mouse_wheel_callback, ecomix);
    evas_object_event_callback_add(ecomix->container, EVAS_CALLBACK_MOUSE_DOWN, ecomix_mouse_down_callback, ecomix);
-   evas_object_event_callback_add(ecomix->container, EVAS_CALLBACK_KEY_DOWN, ecomix_key_down_callback, ecomix);
    
    evas_object_show(ecomix->container);
    evas_object_show(ecomix->bg);

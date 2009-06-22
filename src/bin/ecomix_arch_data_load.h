@@ -17,13 +17,13 @@ typedef enum _Ecomix_Arch_Type {
 } Ecomix_Arch_Type;
 
 typedef struct _Ecomix_Arch_Info {
-   char *archname;
+   const char *archname;
    Ecomix_Arch_Type type;
    Eina_List *list;
 } Ecomix_Arch_Info;
 
 typedef struct _Ecomix_File_Buffer {
-   char *filename;
+   const char *filename;
    char *buf;
    size_t size;
 } Ecomix_File_Buffer;
