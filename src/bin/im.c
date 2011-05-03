@@ -28,56 +28,59 @@ static void libgm_init() {
    }
 }
 
-#define ALPHA_SPARSE_INV_FRACTION 3
-static void
-evas_common_image_set_alpha_sparse(Image_Entry *ie)
-{
-   DATA32  *s, *se;
-   DATA32  nas = 0;
-
-   if (!ie) return;
-   if (!ie->surface) return ;
-   if (!ie->flags.alpha) return;
-
-   s = ie->surface;
-   se = s + (ie->w * ie->h);
-   while (s < se)
-   {
-      DATA32  p = *s & 0xff000000;
-
-      if (!p || (p == 0xff000000))
-	 nas++;
-      s++;
-   }
-   if ((ALPHA_SPARSE_INV_FRACTION * nas) >= (ie->w * ie->h))
-      ie->flags.alpha_sparse = 1;
+static void libgm_reset() {
+   DestroyExceptionInfo(&exception);
+   GetExceptionInfo(&exception);
 }
 
-static void
-_unpremul_data(DATA32 *data, unsigned int len)
+int ecomix_image_load_head_libevas(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
 {
-   DATA32  *de = data + len;
+   int ret = 0;
 
-   while (data < de)
-     {
-	DATA32   a = A_VAL(data);
-	
-	if (a && (a < 255))
-	  {
-	     R_VAL(data) = (R_VAL(data) * 255) / a;
-	     G_VAL(data) = (G_VAL(data) * 255) / a;
-	     B_VAL(data) = (B_VAL(data) * 255) / a;
-	  }
-	data++;
-     }
+   return ret;
+}
+
+int ecomix_image_load_data_libevas(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
+{
+   Evas_Object *o = NULL;
+   int ret = 0;
+   
+   if(! ie) return ret;
+   if(! ie->evas) return ret;
+   if(! file) return ret;
+
+   ie->w = 0;
+   ie->h = 0;
+   if(ie->surface) {
+      free(ie->surface);
+      ie->surface = NULL;
+   }
+
+   o = evas_object_image_add(ie->evas);
+   if(o) {
+      evas_object_image_file_set(o, file, key);
+      if(evas_object_image_load_error_get(o) == EVAS_LOAD_ERROR_NONE) {
+	 evas_object_image_size_get(o, &ie->w, &ie->h);
+
+	 ie->surface = malloc(ie->w * ie->h * sizeof(DATA32));
+	 if(ie->surface) {
+	    memcpy(ie->surface, evas_object_image_data_get(o, EINA_FALSE),
+		  ie->w * ie->h * sizeof(DATA32));
+	    ret = 1;
+	 }
+      }
+
+      evas_object_del(o);
+   }
+   return ret;
 }
 
 int ecomix_image_load_fmem_head_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
 {
-#ifdef HAVE_LIBGRAPHICSMAGICK
    int ret = 0;
-   Image *image;
-   if(!buf) return;
+#ifdef HAVE_LIBGRAPHICSMAGICK
+   Image *image = NULL;
+   if(! buf) return ret;
 
    libgm_init();
    // image = PingBlob(image_info, buf, size, &exception);
@@ -89,11 +92,9 @@ int ecomix_image_load_fmem_head_libgm(Image_Entry *ie, const char *file, const c
       ret = 1;
    }
 
-   return ret;
 #else
    MagickWand *wand = NULL;
-   int ret = 0;
-   if(!buf) return;
+   if(!buf) return ret;
 
    libgm_init();
    wand = NewMagickWand();
@@ -107,43 +108,73 @@ int ecomix_image_load_fmem_head_libgm(Image_Entry *ie, const char *file, const c
    }
 
    DestroyMagickWand(wand);
-   return ret;
 #endif
+   return ret;
 }
 
 int ecomix_image_load_fmem_data_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size)
 {
-#ifdef HAVE_LIBGRAPHICSMAGICK
    int ret = 0;
+#ifdef HAVE_LIBGRAPHICSMAGICK
    Image *image;
-   if(!buf) return;
+   if(! ie) return ret;
+   if(! buf) return ret;
+   if(! size) return ret;
 
    libgm_init();
    image = BlobToImage(image_info, buf, size, &exception);
    if(image) {
       size_t siz;
-      PixelPacket *pix;
-      ie->w = image->columns;
-      ie->h = image->rows;
+      const PixelPacket *pix;
+      ExceptionInfo ex;
+      magick_uint64_t mem_limit = GetMagickResourceLimit(MemoryResource);
 
-      if(ie->surface) free(ie->surface);
-      siz = ie->w * ie->h * sizeof(DATA32);
-      ie->surface = malloc(siz);
-      ie->flags.alpha = (image->matte) ? 1 : 0;
+      GetExceptionInfo(&ex);
+
+      ie->w = 0;
+      ie->h = 0;
       if(ie->surface) {
-	 pix = GetImagePixels(image, 0, 0, image->columns, image->rows);
-	 memcpy(ie->surface, pix, siz);
+           free(ie->surface);
+           ie->surface = NULL;
+      }
+
+      siz = image->columns * image->rows * sizeof(DATA32);
+      if(siz > (mem_limit / 10)) {
+           Image *img;
+           img = ScaleImage(image, image->columns / 10, image->rows / 10, &ex);
+           if(img) {
+                DestroyImage(image);
+                image = img;
+                siz = image->columns * image->rows * sizeof(DATA32);
+           }
+
+      }
+
+      pix = AcquireImagePixels(image, 0, 0, image->columns, image->rows, &ex);
+      if(pix) {
+           ie->surface = malloc(siz);
+           ie->flags.alpha = (image->matte) ? 1 : 0;
+           if(ie->surface) {
+                ie->w = image->columns;
+                ie->h = image->rows;
+                memcpy(ie->surface, pix, siz);
+           } else {
+	      printf("No surface from libgm for %s\n", file);
+	   }
+      } else {
+	 printf("No pix from libgm for %s\n", file);
       }
       DestroyImage(image);
       ret = 1;
+   } else {
+      printf("No image from libgm for %s\n", file);
+      libgm_reset();
    }
 
-   return ret;
 #else
    MagickWand *wand = NULL;
-   int ret = 0;
    Image *image;
-   if(!buf) return;
+   if(! buf) return ret;
 
    libgm_init();
    wand = NewMagickWand();
@@ -164,8 +195,8 @@ int ecomix_image_load_fmem_data_libgm(Image_Entry *ie, const char *file, const c
    }
 
    DestroyMagickWand(wand);
-   return ret;
 #endif
+   return ret;
 }
 
 #endif

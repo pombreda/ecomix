@@ -14,7 +14,7 @@ ecomix_image_orient_set(Evas_Object *obj, Image_Entry *ie, Ecomix_Image_Orient o
    int size;
    int             x, y, w, hw, iw, ih;
    
-   if(!ie || !ie->surface) return;
+   if(! (ie && ie->surface)) return;
 
    switch (orient)
      {
@@ -36,6 +36,7 @@ ecomix_image_orient_set(Evas_Object *obj, Image_Entry *ie, Ecomix_Image_Orient o
    ih = ie->h;
    size = ie->w * ie->h * sizeof(DATA32);
    data2 = malloc(size);
+   if(! data2) return;
    memcpy(data2, ie->surface, size); 
 
    w = ih;
@@ -51,6 +52,10 @@ ecomix_image_orient_set(Evas_Object *obj, Image_Entry *ie, Ecomix_Image_Orient o
       evas_object_image_size_set(obj, ie->w, ie->h);
    size = ie->w * ie->h * sizeof(DATA32);
    data = malloc(size);
+   if(! data) {
+        free(data2);
+        return;
+   }
    memcpy(data, ie->surface, size); 
 
    switch (orient)

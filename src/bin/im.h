@@ -60,21 +60,22 @@ typedef enum _RGBA_Image_Flags
 
 typedef struct _Image_Entry_Flags
 {
-  Evas_Bool loaded       : 1;
-  Evas_Bool dirty        : 1;
-  Evas_Bool activ        : 1;
-  Evas_Bool need_data    : 1;
-  Evas_Bool lru_nodata   : 1;
-  Evas_Bool cached       : 1;
-  Evas_Bool alpha        : 1;
-  Evas_Bool alpha_sparse : 1;
+  Eina_Bool loaded       : 1;
+  Eina_Bool dirty        : 1;
+  Eina_Bool activ        : 1;
+  Eina_Bool need_data    : 1;
+  Eina_Bool lru_nodata   : 1;
+  Eina_Bool cached       : 1;
+  Eina_Bool alpha        : 1;
+  Eina_Bool alpha_sparse : 1;
 #ifdef BUILD_ASYNC_PRELOAD
-  Evas_Bool preload      : 1;
+  Eina_Bool preload      : 1;
 #endif
 } Image_Entry_Flags;
 
 typedef struct _Image_Entry
 {
+   Evas *evas;
    int w;
    int h;
 
@@ -92,58 +93,10 @@ typedef struct _Image_Entry
 
 int ecomix_cache_image_surface_alloc(Image_Entry *ie, int w, int h);
 
-#ifdef BUILD_GRAPHICSMAGICK
+int ecomix_image_load_head_libevas(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
+int ecomix_image_load_data_libevas(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
+
 int ecomix_image_load_fmem_head_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
 int ecomix_image_load_fmem_data_libgm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#else
-#ifdef HAVE_PNG
-int ecomix_image_load_file_head_png(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_png(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_png(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_png(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_JPEG
-int ecomix_image_load_file_head_jpeg(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_jpeg(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_jpeg(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_jpeg(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_TIFF
-int ecomix_image_load_file_head_tiff(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_tiff(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_tiff(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_tiff(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_GIF
-int ecomix_image_load_file_head_gif(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_gif(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_gif(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_gif(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_XPM
-int ecomix_image_load_file_head_xpm(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_xpm(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_xpm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_xpm(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_PMAPS
-int ecomix_image_load_file_head_pmaps(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_pmaps(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_pmaps(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_pmaps(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-
-#ifdef HAVE_SVG
-int ecomix_image_load_file_head_svg(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_file_data_svg(Image_Entry *ie, const char *file, const char *key);
-int ecomix_image_load_fmem_head_svg(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-int ecomix_image_load_fmem_data_svg(Image_Entry *ie, const char *file, const char *key, void *buf, size_t size);
-#endif
-#endif
 
 #endif

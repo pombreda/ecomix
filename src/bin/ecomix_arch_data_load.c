@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Eina.h>
-#include <Ecore_Str.h>
+#include <Eet.h>
 #include <Ecore_File.h>
 
 #include <archive.h>
@@ -17,7 +17,7 @@
 
 #define ECOMIX_FILE_BUF_SIZE_MAX 16777216
 #define ECOMIX_IMAGE_DATA_READ_BUF 10496
-#define ECOMIX_FILTRE_ARCH_LIST 1
+#define ECOMIX_FILTRE_ARCH_LIST 0
 
 static Eina_Hash *mimetype_file;
 static Eina_Hash *mimetype_buffer;
@@ -47,30 +47,35 @@ static int sort_cb(const void *d1, const void *d2)
 Eina_List *ecomix_arch_list_rar_decode(char *buf, size_t size)
 {
    Eina_List *l = NULL;
-   char *p = buf, *s = buf, *s1, *s2;
+   char *p = buf, *s = buf, *s1 = NULL, *s2 = NULL;
    int sep = 0, cnt = 0;
    const char *f;
 
    if(buf && size > 0) {
       while(p < (char *) (buf + size)) {
 	 if(*p == '\n') {
-	    *p = 0;
+	    *p = '\0';
 	    s = p + 1;
-	    if(! strncmp("----------", s, 10)) {
+	    if(strncmp("----------", s, 10) == 0) {
 	       sep = (sep == 0) ? 1 : 0;
 	       continue;
 	    }
 	    if(sep) {
 	       if(cnt == 0) {
-		  s1 = s;
-		  cnt++;
-	       }else if(cnt == 1) {
+		  if(strncmp(s, "Data header type:", 17) == 0) continue;
+                  s1 = s;
+                  cnt++;
+	       } else if(cnt == 1) {
 		  s2 = s;
 		  cnt++;
 	       } else if(cnt == 2) {
-		  if(s2[58] == 'A') {
-		     f = eina_stringshare_add(s1 +1);
-		     l = eina_list_append(l, f);
+		  if((strstr(s, "Unix") && s2[52] != 'd')
+			|| (strstr(s, "Win95/NT") && s2[54] != 'd')
+			|| s2[58] == 'A') {
+                       if(strncmp(s1, " CMT", 4) != 0) {
+                            f = eina_stringshare_add(s1 + 1);
+                            l = eina_list_append(l, f);
+                       }
 		  }
 		  cnt = 0;
 	       }
@@ -80,6 +85,12 @@ Eina_List *ecomix_arch_list_rar_decode(char *buf, size_t size)
       }
    }
 
+   if(0) {
+        Eina_List *n = NULL;
+        EINA_LIST_FOREACH(l, n, f) {
+             printf("%s\n", f);
+        }
+   }
    return l;
 }
 
@@ -107,7 +118,12 @@ Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size)
 	       }
 	    } else if (sep) {
 	       char *s = line + pos;
-	       if(ECOMIX_FILTRE_ARCH_LIST || ecore_str_has_extension(s, "png") || ecore_str_has_extension(s, "jpg") || ecore_str_has_extension(s, "jpeg") || ecore_str_has_extension(s, "gif") || ecore_str_has_extension(s, "tiff"))
+	       if((s && strcmp(s, "CMT") != 0) && (ECOMIX_FILTRE_ARCH_LIST 
+                  || eina_str_has_extension(s, "png") 
+                  || eina_str_has_extension(s, "jpg") 
+                  || eina_str_has_extension(s, "jpeg") 
+                  || eina_str_has_extension(s, "gif") 
+                  || eina_str_has_extension(s, "tiff")))
 	       {
 		  // printf("file : %s\n", s);
 		  f = eina_stringshare_add(s);
@@ -129,10 +145,26 @@ Eina_List *ecomix_arch_list_lha_decode(char *buf, size_t size)
 
 Eina_List *ecomix_arch_list_libevas_get(const char *archname) {
    Eina_List *l = NULL;
+   Eet_File *ef = NULL;
    const char *name;
 
-   name = eina_stringshare_add(archname);
-   l = eina_list_append(l, name);
+   ef = eet_open(archname, EET_FILE_MODE_READ);
+   if(ef) {
+      int cnt = 0;
+      char **list = eet_list(ef, "*images/*", &cnt);
+      if(list) {
+	 int i;
+	 for(i = 0; i < cnt; i++) {
+	    name = eina_stringshare_add(list[i]);
+	    l = eina_list_append(l, name);
+	 }
+	 free(list);
+      }
+      eet_close(ef);
+   } else {
+      name = eina_stringshare_add(archname);
+      l = eina_list_append(l, name);
+   }
 
    return l;
 }
@@ -141,18 +173,19 @@ Eina_List *ecomix_arch_list_libarch_get(const char *archname) {
    struct archive *a;
    struct archive_entry *entry;
    Eina_List *l = NULL;
+   int res = 0;
 
    a = archive_read_new();
    archive_read_support_compression_all(a);
    archive_read_support_format_all(a);
    if(archive_read_open_filename(a, archname, ECOMIX_IMAGE_DATA_READ_BUF) == ARCHIVE_OK) 
    {
-      while (archive_read_next_header(a, &entry) == ARCHIVE_OK) 
+      while (( res = archive_read_next_header(a, &entry)) == ARCHIVE_OK) 
       {
 	 const char *str;
 	 str = eina_stringshare_add(archive_entry_pathname(entry));
          if(str[strlen(str) - 1] != '/')
-	    if(ECOMIX_FILTRE_ARCH_LIST || ecore_str_has_extension(str, "png") || ecore_str_has_extension(str, "jpg") || ecore_str_has_extension(str, "jpeg"))
+	    if(ECOMIX_FILTRE_ARCH_LIST || eina_str_has_extension(str, "png") || eina_str_has_extension(str, "jpg") || eina_str_has_extension(str, "jpeg"))
 	       l = eina_list_append(l, str);
 	    else
 	       eina_stringshare_del(str);
@@ -189,7 +222,7 @@ Ecomix_Arch_Info *ecomix_arch_list_pipe_get(Ecomix_Arch_Info *info)
       close(pfd[1]);
       
       if(info->type == ECOMIX_ARCH_TYPE_RAR)
-	 execlp("unrar", "unrar", "vt", info->archname, (char *) NULL);
+	 execlp("unrar", "unrar", "vt", "-c-", info->archname, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_LHA)
 	 execlp("lha", "lha", "l", info->archname, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_7Z)
@@ -258,24 +291,13 @@ Ecomix_Arch_Info *ecomix_arch_list_get(Ecomix_Arch_Info *info)
 Ecomix_File_Buffer *ecomix_arch_data_libevas_get(Ecomix_Arch_Info *info, char *filename)
 {
    Ecomix_File_Buffer *fbuf = NULL;
-   FILE *f;
-   size_t size;
 
    if(!info || !filename) return NULL;
    if(info->type != ECOMIX_ARCH_TYPE_LIBEVAS) return NULL;
 
-   f = fopen(filename, "rb");
-   if(f) {
-      fseek(f, 0L, SEEK_END);
-      size = ftell(f);
-      fseek(f, 0L, SEEK_SET);
-      if(size < ECOMIX_FILE_BUF_SIZE_MAX) {
-	 fbuf = (Ecomix_File_Buffer *) malloc(sizeof(Ecomix_File_Buffer));
-	 fbuf->filename = eina_stringshare_add(filename);
-	 fbuf->buf = malloc(size);
-	 fbuf->size = fread(fbuf->buf, 1, size, f);
-      }
-      fclose(f);
+   fbuf = (Ecomix_File_Buffer *) calloc(1, sizeof(Ecomix_File_Buffer));
+   if(fbuf) {
+      fbuf->filename = eina_stringshare_add(filename);
    }
 
    return fbuf;
@@ -350,7 +372,7 @@ Ecomix_File_Buffer *ecomix_arch_data_pipe_get(Ecomix_Arch_Info *info, char *file
       close(STDERR_FILENO);
    
       if(info->type == ECOMIX_ARCH_TYPE_RAR)
-	 execlp("unrar", "unrar", "p", "-inul", info->archname, filename, (char *) NULL);
+	 execlp("unrar", "unrar", "p", "-inul", "-p-", info->archname, filename, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_LHA)
 	 execlp("lha", "lha", "-pq", info->archname, filename, (char *) NULL);
       else if(info->type == ECOMIX_ARCH_TYPE_7Z)
@@ -452,6 +474,12 @@ Ecomix_Arch_Info *ecomix_arch_file_set(char *archname, magic_t magic) {
 	    type = ECOMIX_ARCH_TYPE_LHA;
 	 else if(! strcmp(mtype, "7z"))
 	    type = ECOMIX_ARCH_TYPE_7Z;
+      } else {
+	 char *p = rindex(archname, '.');
+	 if(p) {
+	    if(strcmp(p, ".edj") == 0 || strcmp(p, ".eet") == 0)
+	       type = ECOMIX_ARCH_TYPE_LIBEVAS;
+	 }
       }
 
       if(type != ECOMIX_ARCH_TYPE_UNKNOW) {
@@ -469,7 +497,7 @@ Ecomix_Arch_Info *ecomix_arch_file_set(char *archname, magic_t magic) {
 Ecomix_Arch_Info *ecomix_arch_file_del(Ecomix_Arch_Info *info) {
    if(info) {
       char *d;
-      if(info->archname) eina_stringshare_add(info->archname);
+      if(info->archname) info->archname = eina_stringshare_add(info->archname);
       if(info->list) EINA_LIST_FREE(info->list, d) eina_stringshare_del(d);
 
       free(info);
@@ -542,48 +570,19 @@ void ecomix_arch_init() {
 
    if(! mimetype_file) {
       mimetype_file = eina_hash_string_superfast_new(NULL);
-#ifdef BUILD_GRAPHICSMAGICK
       eina_hash_add(mimetype_file, "image/gif",                "libevas");
       eina_hash_add(mimetype_file, "image/png",                "libevas");
       eina_hash_add(mimetype_file, "image/jpeg",               "libevas");
       eina_hash_add(mimetype_file, "image/tiff",               "libevas");
-      // eina_hash_add(mimetype_file, "image/svg+xml",            "libevas");
-      eina_hash_add(mimetype_file, "image/x-xpixmap",          "libevas");
-      // eina_hash_add(mimetype_file, "text/x-c",                 "libevas");
-      eina_hash_add(mimetype_file, "image/x-portable-anymap",  "libevas");
-      eina_hash_add(mimetype_file, "image/x-portable-bitmap",  "libevas");
-      eina_hash_add(mimetype_file, "image/x-portable-graymap", "libevas");
-      eina_hash_add(mimetype_file, "image/x-portable-greymap", "libevas");
-      eina_hash_add(mimetype_file, "image/x-portable-pixmap",  "libevas");
-
-#else
-#ifdef HAVE_GIF
-      eina_hash_add(mimetype_file, "image/gif",                "libevas");
-#endif
-#ifdef HAVE_PNG
-      eina_hash_add(mimetype_file, "image/png",                "libevas");
-#endif
-#ifdef HAVE_JPEG
-      eina_hash_add(mimetype_file, "image/jpeg",               "libevas");
-#endif
-#ifdef HAVE_TIFF
-      eina_hash_add(mimetype_file, "image/tiff",               "libevas");
-#endif
-#ifdef HAVE_SVG
       eina_hash_add(mimetype_file, "image/svg+xml",            "libevas");
-#endif
-#ifdef HAVE_XPM
       eina_hash_add(mimetype_file, "image/x-xpixmap",          "libevas");
       // eina_hash_add(mimetype_file, "text/x-c",                 "libevas");
-#endif
-#ifdef HAVE_PMAPS
       eina_hash_add(mimetype_file, "image/x-portable-anymap",  "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-bitmap",  "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-graymap", "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-greymap", "libevas");
       eina_hash_add(mimetype_file, "image/x-portable-pixmap",  "libevas");
-#endif
-#endif
+      eina_hash_add(mimetype_file, "application/x-eet",   "libevas");
 
       eina_hash_add(mimetype_file, "application/x-tar",   "libarch");
       eina_hash_add(mimetype_file, "application/x-gtar",  "libarch");
@@ -638,24 +637,23 @@ void ecomix_arch_init() {
    }
 
    if(! mimetype_buffer) {
-#ifdef BUILD_GRAPHICSMAGICK
-      static Ecomix_Buffer_Load libgm;
-#else
-      static Ecomix_Buffer_Load gif, png, jpeg, tiff, pmaps, xpm, svg;
-#endif
+      static Ecomix_Buffer_Load libgm, libevas;
 
       mimetype_buffer = eina_hash_string_superfast_new(NULL);
 
-#ifdef BUILD_GRAPHICSMAGICK
+      libevas.head = ecomix_image_load_head_libevas;
+      libevas.data = ecomix_image_load_data_libevas;
+
       libgm.head = ecomix_image_load_fmem_head_libgm;
       libgm.data = ecomix_image_load_fmem_data_libgm;
 
+      eina_hash_add(mimetype_buffer, "libevas",  &libevas);
       eina_hash_add(mimetype_buffer, "image/gif",  &libgm);
       eina_hash_add(mimetype_buffer, "image/png",  &libgm);
       eina_hash_add(mimetype_buffer, "image/jpeg", &libgm);
       eina_hash_add(mimetype_buffer, "image/tiff", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-xcf", &libgm);
-      // eina_hash_add(mimetype_buffer, "image/svg+xml", &libgm);
+      eina_hash_add(mimetype_buffer, "image/svg+xml", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-xpixmap", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-portable-anymap",  &libgm);
       eina_hash_add(mimetype_buffer, "image/x-portable-bitmap",  &libgm);
@@ -663,53 +661,5 @@ void ecomix_arch_init() {
       eina_hash_add(mimetype_buffer, "image/x-portable-greymap", &libgm);
       eina_hash_add(mimetype_buffer, "image/x-portable-pixmap",  &libgm);
       // eina_hash_add(mimetype_buffer, "text/x-c",        &xpm);
-#else
-#ifdef HAVE_GIF
-      gif.head = ecomix_image_load_fmem_head_gif;
-      gif.data = ecomix_image_load_fmem_data_gif;
-      eina_hash_add(mimetype_buffer, "image/gif",  &gif);
-#endif
-
-#ifdef HAVE_PNG
-      png.head = ecomix_image_load_fmem_head_png;
-      png.data = ecomix_image_load_fmem_data_png;
-      eina_hash_add(mimetype_buffer, "image/png",  &png);
-#endif
-
-#ifdef HAVE_JPEG
-      jpeg.head = ecomix_image_load_fmem_head_jpeg;
-      jpeg.data = ecomix_image_load_fmem_data_jpeg;
-      eina_hash_add(mimetype_buffer, "image/jpeg", &jpeg);
-#endif
-
-#ifdef HAVE_TIFF
-      tiff.head = ecomix_image_load_fmem_head_tiff;
-      tiff.data = ecomix_image_load_fmem_data_tiff;
-      eina_hash_add(mimetype_buffer, "image/tiff", &tiff);
-#endif
-
-#ifdef HAVE_SVG
-      svg.head = ecomix_image_load_fmem_head_svg;
-      svg.data = ecomix_image_load_fmem_data_svg;
-      eina_hash_add(mimetype_buffer, "image/svg+xml", &svg);
-#endif
-
-#ifdef HAVE_PMAPS
-      pmaps.head = ecomix_image_load_fmem_head_pmaps;
-      pmaps.data = ecomix_image_load_fmem_data_pmaps;
-      eina_hash_add(mimetype_buffer, "image/x-portable-anymap",  &pmaps);
-      eina_hash_add(mimetype_buffer, "image/x-portable-bitmap",  &pmaps);
-      eina_hash_add(mimetype_buffer, "image/x-portable-graymap", &pmaps);
-      eina_hash_add(mimetype_buffer, "image/x-portable-greymap", &pmaps);
-      eina_hash_add(mimetype_buffer, "image/x-portable-pixmap",  &pmaps);
-#endif
-
-#ifdef HAVE_XPM
-      xpm.head = ecomix_image_load_fmem_head_xpm;
-      xpm.data = ecomix_image_load_fmem_data_xpm;
-      eina_hash_add(mimetype_buffer, "image/x-xpixmap", &xpm);
-      // eina_hash_add(mimetype_buffer, "text/x-c",        &xpm);
-#endif
-#endif
    }
 }
